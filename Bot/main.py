@@ -1,14 +1,16 @@
 import os
 import json
 
-import discord
 from discord.ext import commands
+from ProgressModule import ProgressModule
 from leetcode_service.leetcode_client import LeetcodeClient
 
 if os.path.exists(os.path.join(os.path.dirname(__file__),"config.json")):
     f = open(os.path.join(os.path.dirname(__file__),"config.json"))
     data = json.load(f)
     f.close()
+
+IS_TEST = os.getenv('DISCORD_TOKEN') == None
 
 TOKEN = os.getenv('DISCORD_TOKEN') or data["DISCORD_TOKEN"]
 
@@ -21,18 +23,13 @@ class LeetcodeBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=self.CONFIG['command_prefix'])
 
+        self.add_cog(ProgressModule(self))
+
 lcb = LeetcodeBot()
 
 @lcb.event
 async def on_ready():
     print(f"{lcb.user} is online")
 
-@lcb.command(name="solved", aliases=["s", "slvd"])
-async def solved(ctx, arg):
-    if arg.isnumeric():
-        pass
-    else:
-        question = LeetcodeClient.GetQuestion(arg)
-        await ctx.send(f"{question.title}\n{question.difficulty}\n{question.url}")
-
-lcb.run(TOKEN)
+if IS_TEST:
+    lcb.run(TOKEN)
