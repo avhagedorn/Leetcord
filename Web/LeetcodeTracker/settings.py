@@ -25,7 +25,7 @@ with open(BASE_DIR.joinpath("config.json")) as f:
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = data["SECRET_KEY"]
+SECRET_KEY = "django-insecure-a(&zzm2_c!^cb0e6oyt934vnf*$y^7j8ym_j8c35azt*zrqrai"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
