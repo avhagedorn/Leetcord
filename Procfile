@@ -1,1 +1,1 @@
-web: python Web/manage.py runserver
+web: gunicorn Web/LeetcodeTracker.wsgi
