@@ -24,7 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-a(&zzm2_c!^cb0e6oyt934vnf*$y^7j8ym_j8c35azt*zrqrai"
+if os.path.exists(os.path.join(BASE_DIR,"config.json")):
+    f = open(os.path.join(BASE_DIR,"config.json"))
+    data = json.load(f)
+    f.close()
+
+SECRET_KEY = os.getenv("SECRET_KEY") or data['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
