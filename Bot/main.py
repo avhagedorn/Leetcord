@@ -1,12 +1,16 @@
 import os
-from dotenv import load_dotenv
+import json
 
 import discord
 from discord.ext import commands
 from leetcode_service.leetcode_client import LeetcodeClient
 
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
+if os.path.exists(os.path.join(os.path.dirname(__file__),"config.json")):
+    f = open(os.path.join(os.path.dirname(__file__),"config.json"))
+    data = json.load(f)
+    f.close()
+
+TOKEN = os.getenv('DISCORD_TOKEN') or data["DISCORD_TOKEN"]
 
 class LeetcodeBot(commands.Bot):
 

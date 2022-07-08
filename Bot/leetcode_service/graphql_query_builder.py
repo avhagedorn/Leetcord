@@ -1,4 +1,3 @@
-from matplotlib.pyplot import title
 from leetcode_service.leetcode_constants import Constants
 
 class GraphqlQueryBuilder:
