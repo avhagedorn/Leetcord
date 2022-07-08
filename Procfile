@@ -1,1 +1,1 @@
-web: gunicorn Web/LeetcodeTracker.wsgi
+web: gunicorn --pythonpath Web LeetcodeTracker.wsgi
