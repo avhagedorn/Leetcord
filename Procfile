@@ -1,2 +1,2 @@
-release: python Web/manage.py migrate
-worker: python Bot/main.py
+release: python Web/manage.py migrate && python Bot/main.py
+web: gunicorn --pythonpath Web LeetcodeTracker.wsgi
