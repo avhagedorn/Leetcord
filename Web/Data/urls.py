@@ -19,5 +19,6 @@ from . import views
 app_name = 'Data'
 urlpatterns = [
     path('',views.index,name="index"),
-    path('solution/<id>',views.solution,name="solution")
+    path('solution/<id>',views.solution,name="solution"),
+    path('member/<discord_id>',views.member,name="member")
 ]
