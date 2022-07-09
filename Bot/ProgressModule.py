@@ -8,12 +8,12 @@ class ProgressModule(commands.Cog):
     async def solved(self, ctx, *args):
         
         user_id = ctx.message.author.id
-        problem_query = ctx.send(f"{' '.join(args)}")
+        problem_query = f"{' '.join(args)}"
 
         problem = None # TODO: query from Azure
 
-        if not question:
-            
+        if not problem:
+            # TODO: query from lc, save to Azure
             question = LeetcodeClient.GetQuestionFromSearch(problem_query)
 
             await ctx.send(f"{question.title}\n{question.difficulty}\n{question.url}")
