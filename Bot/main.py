@@ -10,9 +10,12 @@ if os.path.exists(os.path.join(os.path.dirname(__file__),"config.json")):
     data = json.load(f)
     f.close()
 
+def load(key):
+    return os.getenv(key) or data[key]
+
 IS_TEST = os.getenv('DISCORD_TOKEN') == None
 
-TOKEN = os.getenv('DISCORD_TOKEN') or data["DISCORD_TOKEN"]
+TOKEN = load('DISCORD_TOKEN')
 
 class LeetcodeBot(commands.Bot):
 
