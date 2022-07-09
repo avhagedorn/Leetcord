@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Member(models.Model):
-    discordID = models.IntegerField()
+    discordID = models.BigIntegerField()
     discordName = models.CharField(max_length=35)
     discordPFP = models.URLField()
     date_verified = models.DateField(auto_now_add=True)
