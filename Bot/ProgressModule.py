@@ -1,4 +1,5 @@
 from discord.ext import commands
+from db.dao import DAO
 
 from leetcode_service.leetcode_client import LeetcodeClient
 
@@ -17,3 +18,13 @@ class ProgressModule(commands.Cog):
             question = LeetcodeClient.GetQuestionFromSearch(problem_query)
 
             await ctx.send(f"{question.title}\n{question.difficulty}\n{question.url}")
+
+    
+    @commands.command(name="user")
+    async def user(self, ctx):
+
+        user_id = ctx.message.author.id
+
+        x = DAO()
+        user = x.GetUser(user_id)
+        await ctx.send(str(user))
