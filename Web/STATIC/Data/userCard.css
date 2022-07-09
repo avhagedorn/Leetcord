@@ -1,0 +1,19 @@
+.card {
+    background-color: transparent;
+    border: 0px;
+}
+.card-body {
+    background-color: var(--bs-dark);
+}
+.card-body .card-text {
+    margin: 0px;
+}
+
+#PFP {
+    max-width: 128px;
+    max-height: 128px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    top: 20px
+}

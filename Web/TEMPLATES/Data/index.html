@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}Leetcord{% endblock %}
 {% block CSS %}
 <link rel="stylesheet" href="{% static 'Data/table.css' %}">
 {% endblock %}
@@ -8,6 +9,9 @@
     <div class="row d-flex justify-content-center px-2">
         <table class="table table-dark table-hover">
             <thead>
+                <tr>
+                    <td class="text-center rounded-top" colspan="100">15 Most Recently Submitted Solutions</td>
+                </tr>
                 <tr>
                     <th scope="col">
                         <p class="d-none d-md-inline"><i class="fa-brands fa-discord"></i> Discord </p>
@@ -33,7 +37,7 @@
             </thead>
             <tbody>
                 {% for solve in Solves %}
-                <tr data-href="#">
+                <tr data-href="{% url 'Data:solution' id=solve.id %}">
                     <td scope="row" class="align-text-center">
                         <img src="{{solve.solvee.discordPFP}}" alt="Leetcode Logo" width="32" height="32" class="d-inline-block rounded-circle">
                         {{solve.solvee.discordName}}
@@ -51,7 +55,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td class="text-center" colspan="100" style="font-size: 3vmax ;">No Data Was Found</td>
+                    <td class="text-center rounded-bottom" colspan="100" style="font-size: 3vmax ;">No Data Was Found</td>
                 </tr>
                 {% endfor %}
             </tbody>

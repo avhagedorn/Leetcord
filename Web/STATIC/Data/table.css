@@ -1,12 +1,15 @@
+/* Title Row Formatting */
+table thead tr:first-of-type td{
+    border-bottom: 0px;
+}
+
+
 /* Round up to the column labeled .sm-round */
-thead tr th:first-of-type{
-    border-radius: 0.25rem 0rem 0rem 0rem;
-}
-thead tr th.sm-round{
-    border-radius: 0rem 0.25rem 0rem 0rem;
-}
 tbody tr:last-of-type td:first-of-type{
     border-radius: 0rem 0rem 0rem 0.25rem;
+}
+tbody tr:last-of-type td:last-of-type{
+    border-radius: 0rem 0rem 0.25rem 0rem;
 }
 tbody tr:last-of-type td.sm-round{
     border-radius: 0rem 0rem 0.25rem 0rem;
@@ -14,40 +17,30 @@ tbody tr:last-of-type td.sm-round{
 
 /* If the screen is md or greater make the rightmost column have rounding */
 @media only screen and (min-width: 768px) {
-    thead tr th.sm-round{
-        border-radius: 0rem;
-    }
     tbody tr:last-of-type td.sm-round{
         border-radius: 0rem;
-    }
-    thead tr th.md-round{
-        border-radius: 0rem 0.25rem 0rem 0rem;
     }
     tbody tr:last-of-type td.md-round{
         border-radius: 0rem 0rem 0.25rem 0rem;
     }
 }
 
-/* If the screen is md or greater make the rightmost column have rounding */
+/* If the screen is lg or greater make the rightmost column have rounding */
 @media only screen and (min-width: 992px) {
-    thead tr th.md-round{
-        border-radius: 0rem;
-    }
     tbody tr:last-of-type td.md-round{
         border-radius: 0rem;
-    }
-    thead tr th:last-of-type{
-        border-radius: 0rem 0.25rem 0rem 0rem;
     }
     tbody tr:last-of-type td:last-of-type{
         border-radius: 0rem 0rem 0.25rem 0rem;
     }
 }
 
+/* Remove Bootstrap's bottom borders on the bottom row */
 tbody tr:last-of-type td {
     border-bottom-width: 0px;
 }
 
+/* Ensure that the border after the head is visible */
 thead tr th {
     border-bottom-color: #32383e !important;
     border-bottom-width: 3px !important;
