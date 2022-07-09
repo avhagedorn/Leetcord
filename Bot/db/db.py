@@ -1,6 +1,8 @@
 import os
 import json
 import pyodbc
+from sqlalchemy import create_engine
+from sqlalchemy.engine import URL
 
 if os.path.exists(os.path.join(os.path.dirname(__file__),"config.json")):
     f = open(os.path.join(os.path.dirname(__file__),"config.json"))
@@ -10,16 +12,7 @@ if os.path.exists(os.path.join(os.path.dirname(__file__),"config.json")):
 def load(key):
     return os.getenv(key) or data[key]
 
-conn_str = 'Driver={ODBC Driver 17 for SQL Server};SERVER='+load("DBHOST")+',1433;DATABASE='+load("DBNAME")+';UID='+load("DBUSER")+';PWD='+load("DBPASS")
-print(conn_str)
-engine_azure = pyodbc.connect(conn_str)
+connection_string = 'Driver={ODBC Driver 17 for SQL Server};SERVER='+load("DBHOST")+',1433;DATABASE='+load("DBNAME")+';UID='+load("DBUSER")+';PWD='+load("DBPASS")
+connection_url = URL.create("mssql+pyodbc", query={"odbc_connect": connection_string})
 
-connection = engine_azure.cursor()
-
-connection.execute("SELECT * FROM data_member")
-row = connection.fetchone()
-
-print(row)
-
-
-print("hi")
+engine = create_engine(connection_url)
