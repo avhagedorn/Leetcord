@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import *
 # Register your models here.
-admin.register(Member)
-admin.register(Problem)
-admin.register(Solve)
+admin.site.register(Member)
+admin.site.register(Problem)
+admin.site.register(Solve)
