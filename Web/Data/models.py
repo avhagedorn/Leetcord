@@ -20,7 +20,7 @@ class Problem(models.Model):
     difficulty = models.SmallIntegerField(choices=DIFFICULTY_CHOICES.choices)
 
     def __str__(self) -> str:
-        return f"Leetcode {self.problem_number} : {self.slug} | {self.difficulty}"
+        return f"Leetcode {self.problem_number} : {self.slug} | {self.get_difficulty_display()}"
 
 class Solve(models.Model):
     solvee = models.ForeignKey("Member",related_name="Solves",on_delete=models.CASCADE)
