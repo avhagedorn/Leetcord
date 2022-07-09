@@ -21,7 +21,7 @@
                         <i class="fa-solid fa-chart-line d-none d-md-inline"> </i>
                         Difficulty
                     </th>
-                    <th scope="col" class="d-none d-md-table-cell">
+                    <th scope="col" class="d-none d-md-table-cell md-round">
                         <i class="fa-solid fa-calendar-day d-none d-md-inline"> </i>
                         Date Solved
                     </th>
@@ -33,14 +33,14 @@
             </thead>
             <tbody>
                 {% for solve in Solves %}
-                <tr data-href="https://www.google.com/">
+                <tr data-href="#">
                     <td scope="row" class="align-text-center">
                         <img src="{{solve.solvee.discordPFP}}" alt="Leetcode Logo" width="32" height="32" class="d-inline-block rounded-circle">
                         {{solve.solvee.discordName}}
                     </td>
                     <td>{{solve.problem.problem_number}} <p class="d-none d-md-inline"><i class="fa-solid fa-arrow-right"></i> {{solve.problem.slug | title}}</p></td>
                     <td class="sm-round diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</td>
-                    <td class="d-none d-md-table-cell">{{solve.date}}</td>
+                    <td class="md-round d-none d-md-table-cell">{{solve.date}}</td>
                     <td class="d-none d-lg-table-cell">
                         {% if solve.takeaway %}
                         <i class="fa-solid fa-check text-success"></i>

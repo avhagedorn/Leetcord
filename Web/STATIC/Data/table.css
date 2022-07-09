@@ -20,6 +20,22 @@ tbody tr:last-of-type td.sm-round{
     tbody tr:last-of-type td.sm-round{
         border-radius: 0rem;
     }
+    thead tr th.md-round{
+        border-radius: 0rem 0.25rem 0rem 0rem;
+    }
+    tbody tr:last-of-type td.md-round{
+        border-radius: 0rem 0rem 0.25rem 0rem;
+    }
+}
+
+/* If the screen is md or greater make the rightmost column have rounding */
+@media only screen and (min-width: 992px) {
+    thead tr th.md-round{
+        border-radius: 0rem;
+    }
+    tbody tr:last-of-type td.md-round{
+        border-radius: 0rem;
+    }
     thead tr th:last-of-type{
         border-radius: 0rem 0.25rem 0rem 0rem;
     }
@@ -28,6 +44,9 @@ tbody tr:last-of-type td.sm-round{
     }
 }
 
+tbody tr:last-of-type td {
+    border-bottom-width: 0px;
+}
 
 thead tr th {
     border-bottom-color: #32383e !important;
