@@ -20,7 +20,6 @@ class Member(Base):
 
 
 class Problem(Base):
-    
     __tablename__ = "data_problem"
 
     id = Column(Integer, primary_key=True)

@@ -19,10 +19,19 @@ class ProgressModule(commands.Cog):
 
             await ctx.send(f"{question.title}\n{question.difficulty}\n{question.url}")
 
+
+    @commands.is_owner()
+    @commands.command(name="makeuser")
+    async def makeuser(self, ctx):
+        author = ctx.message.author
+        user_id = ctx.message.author.id
+        user_name = ctx.message.auth
+
+        await ctx.send("user is admin")
+
     
     @commands.command(name="user")
     async def user(self, ctx):
-
         user_id = ctx.message.author.id
 
         x = DAO()

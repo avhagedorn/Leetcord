@@ -23,4 +23,3 @@ class DAO:
 
     def __del__(cls):
         cls._session.close()
-
