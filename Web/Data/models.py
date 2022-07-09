@@ -4,7 +4,7 @@ from django.db import models
 def update_children(member):
     return member.verified_by.verified_by
 class Member(models.Model):
-    discordID = models.BigIntegerField()
+    discordID = models.BigIntegerField(unique=True)
     discordName = models.CharField(max_length=35)
     discordPFP = models.URLField()
     date_verified = models.DateField(auto_now_add=True)
@@ -26,7 +26,7 @@ class Problem(models.Model):
 
 class Solve(models.Model):
     solvee = models.ForeignKey("Member",related_name="Solves",on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     problem = models.ForeignKey("Problem", related_name="Solves",on_delete=models.CASCADE)
     takeaway = models.CharField(max_length=255,null=True,blank=True)
     def __str__(self) -> str:
