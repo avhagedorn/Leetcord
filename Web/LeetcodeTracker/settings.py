@@ -149,4 +149,4 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-django_heroku.settings(locals(),databases=False,allowed_hosts=False,secret_key=False)
+django_heroku.settings(locals(),databases=False,secret_key=False)
