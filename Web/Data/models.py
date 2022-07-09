@@ -7,6 +7,9 @@ class Member(models.Model):
     discordPFP = models.URLField()
     date_verified = models.DateField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return f"Member {self.discordName} verified on {self.date_verified}"
+
 class Problem(models.Model):
     class DIFFICULTY_CHOICES(models.IntegerChoices):
         EASY = 0, "Easy"
@@ -16,8 +19,13 @@ class Problem(models.Model):
     slug = models.CharField(max_length=200)
     difficulty = models.SmallIntegerField(choices=DIFFICULTY_CHOICES.choices)
 
+    def __str__(self) -> str:
+        return f"Leetcode {self.problem_number} : {self.slug} | {self.difficulty}"
+
 class Solve(models.Model):
     solvee = models.ForeignKey("Member",related_name="Solves",on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     problem = models.ForeignKey("Problem", related_name="Solves",on_delete=models.CASCADE)
     takeaway = models.CharField(max_length=255)
+    def __str__(self) -> str:
+        return f"{self.solvee.discordName}'s solution to {self.problem} on {self.date}"
