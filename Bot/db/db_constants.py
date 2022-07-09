@@ -1,6 +1,5 @@
 import os
 import json
-import enum
 from sqlalchemy.engine import URL
 
 if os.path.exists(os.path.join(os.path.dirname(__file__),"config.json")):
