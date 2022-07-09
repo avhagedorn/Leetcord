@@ -20,5 +20,7 @@ app_name = 'Data'
 urlpatterns = [
     path('',views.index,name="index"),
     path('solution/<id>',views.solution,name="solution"),
-    path('member/<discord_id>',views.member,name="member")
+    path('member/<discord_id>',views.member,name="member"),
+    path('problem',views.postProblem,name="postProblem"),
+    path('problem/<problem_number>',views.problem,name="problem")
 ]

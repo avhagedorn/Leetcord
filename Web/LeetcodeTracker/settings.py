@@ -32,7 +32,7 @@ if os.path.exists(os.path.join(BASE_DIR,"config.json")):
 SECRET_KEY = os.getenv("SECRET_KEY") or data['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = not os.getenv("SECRET_KEY")
 
 ALLOWED_HOSTS = ['leetcode-discord.herokuapp.com','127.0.0.1','localhost']
 

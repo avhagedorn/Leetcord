@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import *
 
 # Create your views here.
@@ -25,7 +25,7 @@ def member(request, discord_id):
     user = Member.objects.filter(discordID=discord_id).first()
     if user:
         context = {
-            "user" : user,
+            "member" : user,
             "userSolves" : user.Solves.all().order_by("-date")[:15]
         }
     else:
@@ -33,3 +33,26 @@ def member(request, discord_id):
             "discordID" : discord_id
         }
     return render(request, "Data/member.html", context=context)
+
+def postProblem(request):
+    if request.POST and request.POST.get('LCNum'):
+        return redirect('Data:problem',problem_number=request.POST.get('LCNum'))
+    else:
+        return redirect('Data:index')
+        
+
+def problem(request, problem_number):
+    if request.POST:
+        return redirect('Data:postProblem')
+    else:
+        problem = Problem.objects.filter(problem_number=problem_number).first()
+        if problem:
+            context = {
+                "problem" : problem,
+                "solves" : problem.Solves.all().order_by("-date")[:15] 
+            }
+        else:
+            context = {
+                "problem_number" : problem_number
+            }
+        return render(request,"Data/problem.html",context=context)

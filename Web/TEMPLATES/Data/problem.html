@@ -7,13 +7,13 @@
 {% block body %}
     <div class="container">
         <div class="row d-flex justify-content-center">
-            {% if member %}
+            {% if problem %}
             <div class="col-auto col-md-5 col-lg-4 col-xl-3 mb-2">
-                <div class="card text-white ml-md-auto mr-md-auto" style="max-width: 18rem;">
-                    <img src="{{member.discordPFP}}" class="card-img-top rounded-circle" id="PFP" alt="{{member.discordName}}'s PFP">
+                <div class="card text-white ml-md-auto mr-md-auto" style="max-width: 18rem;text-decoration: none;">
                     <div class="card-body pt-4 rounded">
-                        <h5 class="card-title text-center">{{member.discordName}}</h5>
-                        <p class="card-text"><strong><i class="fa-solid fa-circle-check text-info"></i> Verified On :</strong> {{member.date_verified}}</p>
+                        <h5 class="card-title text-center">Leetcode #{{problem.problem_number}}</h5>
+                        <p class="card-text"><strong>Problem Name :</strong> {{problem.slug | title}}</p>
+                        <p class="card-text"><strong>Difficulty :</strong> <span class="diff-{{problem.difficulty}}">{{problem.get_difficulty_display}}</span></p>
                     </div>
                 </div>
             </div>
@@ -21,40 +21,38 @@
                 <table class="table table-dark table-hover">
                     <thead>
                         <tr>
-                            <td class="text-center rounded-top" colspan="100">Last 15 Solutions By {{member.discordName}}</td>
+                            <td class="text-center rounded-top" colspan="100">15 Recent Solutions For Leetcode #{{problem.problem_number}}</td>
                         </tr>
                         <tr>
                             <th scope="col">
-                                <p class="d-inline d-lg-none">LC# </p>
-                                <p class="d-none d-lg-inline"><i class="fa-solid fa-circle-exclamation"></i> Leetcode Name</p>
-                            </th>
-                            <th scope="col">
-                                <i class="fa-solid fa-chart-line d-none d-lg-inline"> </i>
-                                Difficulty
+                                <p class="d-none d-lg-inline"><i class="fa-brands fa-discord"></i> Discord </p>
+                                User
                             </th>
                             <th scope="col">
                                 <i class="fa-solid fa-comments d-none d-lg-inline"> </i>
                                 Takeaway?
                             </th>
-                            <th scope="col" class="d-none d-lg-table-cell md-round">
+                            <th scope="col" class="d-none d-md-table-cell sm-round">
                                 <i class="fa-solid fa-calendar-day d-none d-lg-inline"> </i>
                                 Date Solved
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for solve in userSolves %}
+                        {% for solve in solves %}
                         <tr data-href="{% url 'Data:solution' id=solve.id %}">
-                            <td>{{solve.problem.problem_number}} <p class="d-none d-md-inline"><i class="fa-solid fa-arrow-right"></i> {{solve.problem.slug | title}}</p></td>
-                            <td class="diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</td>
-                            <td class="md-round">
+                            <td scope="row" class="align-text-center">
+                                <img src="{{solve.solvee.discordPFP}}" alt="Leetcode Logo" width="32" height="32" class="d-inline-block rounded-circle">
+                                {{solve.solvee.discordName}}
+                            </td>
+                            <td>
                                 {% if solve.takeaway %}
                                 <i class="fa-solid fa-check text-success"></i>
                                 {% else %}
                                 <i class="fa-solid fa-x text-danger"></i>
                                 {% endif %}
                             </td>
-                            <td class="d-none d-lg-table-cell">{{solve.date}}</td>
+                            <td class="md-round d-none d-md-table-cell">{{solve.date}}</td>
                         </tr>
                         {% empty %}
                         <tr>
@@ -69,7 +67,7 @@
                 <div class="alert alert-danger" role="alert">
                     <h4 class="alert-heading"><i class="fa-solid fa-triangle-exclamation"></i> Critical Error!</h4>
                     <hr>
-                    <p class="mb-0">A member with an ID of {{discordID}} was not found on the server. This member may have been deleted or there may be an error in the URL.</p>
+                    <p class="mb-0">A problem with a Problem Number of {{problem_number}} was not found on the server. This problem does not exist on the server (likely meaning nobody has completed it) or it was deleted.</p>
                 </div>
             </div>
             {% endif %}
