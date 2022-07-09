@@ -32,6 +32,4 @@ class Constants:
 
     PROBLEMS_PATH = "https://leetcode.com/problems"
 
-    PROBLEMSET = "https://leetcode.com/problemset"
-
     GRAPHQL_PATH = "https://leetcode.com/graphql"

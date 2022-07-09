@@ -34,12 +34,15 @@ class LeetcodeClient:
 
         if response.ok:
             response = response.json()
-            if 'data' in response and 'problemsetQuestionList' in response['data']:
+            if 'data' in response \
+                and 'problemsetQuestionList' in response['data'] \
+                and 'questions' in response['data']['problemsetQuestionList']:
+
                 questions = response['data']['problemsetQuestionList']['questions']
 
                 for question in questions:
-                    if question['title'] == query \
-                        or question['titleSlug'] == query \
+                    if question['title'].lower() == query.lower() \
+                        or question['titleSlug'].lower() == query.lower() \
                         or question['frontendQuestionId'] == query:
                         
                         return LeetcodeQuestion(
@@ -50,6 +53,6 @@ class LeetcodeClient:
                 
                 raise Exception("No questions matched")
             else:
-                raise Exception()
+                raise Exception("Malformed response")
         else:
             raise Exception(response.text)

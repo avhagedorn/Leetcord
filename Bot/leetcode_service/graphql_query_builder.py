@@ -13,12 +13,13 @@ class GraphqlQueryBuilder:
         }
     
     @staticmethod
-    def BuildSearchQuery(query):
+    def BuildSearchQuery(query, limit=1):
         return {
             'query' : Constants.PROBLEMSET_QUERY,
             'operationName' : Constants.PROBLEMSET_OPERATION,
             'variables' : {
                 'categorySlug' : '',
+                'limit' : limit,
                 'filters' : {
                     'searchKeywords' : query
                 }
