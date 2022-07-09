@@ -20,3 +20,16 @@ def solution(request,id):
             "id" : id
         }
     return render(request, "Data/solution.html",context=context)
+
+def member(request, discord_id):
+    user = Member.objects.filter(discordID=discord_id).first()
+    if user:
+        context = {
+            "user" : user,
+            "userSolves" : user.Solves.all().order_by("-date")[:15]
+        }
+    else:
+        context = {
+            "discordID" : discord_id
+        }
+    return render(request, "Data/member.html", context=context)

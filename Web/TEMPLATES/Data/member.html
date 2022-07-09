@@ -7,59 +7,54 @@
 {% block body %}
     <div class="container">
         <div class="row d-flex justify-content-center">
-            {% if solve %}
+            {% if user %}
             <div class="col-auto col-md-5 col-lg-4 col-xl-3 mb-2">
-                <a href="{% url 'Data:member' discord_id=solve.solvee.discordID%}" class="card text-white ml-md-auto mr-md-auto" style="max-width: 18rem;text-decoration: none;">
-                    <img src="{{solve.solvee.discordPFP}}" class="card-img-top rounded-circle" id="PFP" alt="{{solve.solvee.discordName}}'s PFP">
+                <div class="card text-white ml-md-auto mr-md-auto" style="max-width: 18rem;">
+                    <img src="{{user.discordPFP}}" class="card-img-top rounded-circle" id="PFP" alt="{{user.discordName}}'s PFP">
                     <div class="card-body pt-4 rounded">
-                        <h5 class="card-title text-center">{{solve.solvee.discordName}}</h5>
-                        <p class="card-text"><strong>Leetcode Number :</strong> {{solve.problem.problem_number}}</p>
-                        <p class="card-text"><strong>Problem Name :</strong> {{solve.problem.slug | title}}</p>
-                        <p class="card-text"><strong>Difficulty :</strong> <span class="diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</span></p>
-                        <p class="card-text"><strong>Solved On :</strong> {{solve.date}}</p>
-                        {% if solve.takeaway %}
-                        <p class="card-text text-center mt-2"><strong>Takeaway</strong></p>
-                        <textarea class="form-control" rows="5" readonly placeholder="{{solve.takeaway}}"></textarea>
-                        {% endif %}
+                        <h5 class="card-title text-center">{{user.discordName}}</h5>
+                        <p class="card-text"><strong><i class="fa-solid fa-circle-check text-info"></i> Verified On :</strong> {{user.date_verified}}</p>
                     </div>
-                </a>
+                </div>
             </div>
             <div class="col-12 col-md-7 col-lg-8 col-xl-9">
                 <table class="table table-dark table-hover">
                     <thead>
                         <tr>
-                            <td class="text-center rounded-top" colspan="100">15 Recent Solutions For Leetcode {{solve.problem.problem_number}}</td>
+                            <td class="text-center rounded-top" colspan="100">Last 15 Solutions By {{user.discordName}}</td>
                         </tr>
                         <tr>
                             <th scope="col">
-                                <p class="d-none d-lg-inline"><i class="fa-brands fa-discord"></i> Discord </p>
-                                User
+                                <p class="d-inline d-lg-none">LC# </p>
+                                <p class="d-none d-lg-inline"><i class="fa-solid fa-circle-exclamation"></i> Leetcode Name</p>
+                            </th>
+                            <th scope="col">
+                                <i class="fa-solid fa-chart-line d-none d-lg-inline"> </i>
+                                Difficulty
                             </th>
                             <th scope="col">
                                 <i class="fa-solid fa-comments d-none d-lg-inline"> </i>
                                 Takeaway?
                             </th>
-                            <th scope="col" class="d-none d-md-table-cell sm-round">
+                            <th scope="col" class="d-none d-lg-table-cell md-round">
                                 <i class="fa-solid fa-calendar-day d-none d-lg-inline"> </i>
                                 Date Solved
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for problem_solve in ProblemSolves %}
+                        {% for solve in userSolves %}
                         <tr data-href="{% url 'Data:solution' id=solve.id %}">
-                            <td scope="row" class="align-text-center">
-                                <img src="{{solve.solvee.discordPFP}}" alt="Leetcode Logo" width="32" height="32" class="d-inline-block rounded-circle">
-                                {{solve.solvee.discordName}}
-                            </td>
-                            <td>
+                            <td>{{solve.problem.problem_number}} <p class="d-none d-md-inline"><i class="fa-solid fa-arrow-right"></i> {{solve.problem.slug | title}}</p></td>
+                            <td class="diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</td>
+                            <td class="md-round">
                                 {% if solve.takeaway %}
                                 <i class="fa-solid fa-check text-success"></i>
                                 {% else %}
                                 <i class="fa-solid fa-x text-danger"></i>
                                 {% endif %}
                             </td>
-                            <td class="md-round d-none d-md-table-cell">{{solve.date}}</td>
+                            <td class="d-none d-lg-table-cell">{{solve.date}}</td>
                         </tr>
                         {% empty %}
                         <tr>

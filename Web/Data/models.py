@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+def update_children(member):
+    return member.verified_by.verified_by
 class Member(models.Model):
     discordID = models.BigIntegerField()
     discordName = models.CharField(max_length=35)
