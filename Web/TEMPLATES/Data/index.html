@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block CSS %}
+<link rel="stylesheet" href="{% static 'Data/table.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row d-flex justify-content-center px-2">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <p class="d-none d-md-inline"><i class="fa-brands fa-discord"></i> Discord </p>
+                        User
+                    </th>
+                    <th scope="col">
+                        <p class="d-inline d-md-none">LC# </p>
+                        <p class="d-none d-md-inline"><i class="fa-solid fa-circle-exclamation"></i> Leetcode Name</p>
+                    </th>
+                    <th scope="col" class="sm-round">
+                        <i class="fa-solid fa-chart-line d-none d-md-inline"> </i>
+                        Difficulty
+                    </th>
+                    <th scope="col" class="d-none d-md-table-cell">
+                        <i class="fa-solid fa-calendar-day d-none d-md-inline"> </i>
+                        Date Solved
+                    </th>
+                    <th scope="col" class="d-none d-lg-table-cell">
+                        <i class="fa-solid fa-comments"> </i>
+                        Takeaway?
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solve in Solves %}
+                <tr data-href="https://www.google.com/">
+                    <td scope="row" class="align-text-center">
+                        <img src="{{solve.solvee.discordPFP}}" alt="Leetcode Logo" width="32" height="32" class="d-inline-block rounded-circle">
+                        {{solve.solvee.discordName}}
+                    </td>
+                    <td>{{solve.problem.problem_number}} <p class="d-none d-md-inline"><i class="fa-solid fa-arrow-right"></i> {{solve.problem.slug | title}}</p></td>
+                    <td class="sm-round diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</td>
+                    <td class="d-none d-md-table-cell">{{solve.date}}</td>
+                    <td class="d-none d-lg-table-cell">
+                        {% if solve.takeaway %}
+                        <i class="fa-solid fa-check text-success"></i>
+                        {% else %}
+                        <i class="fa-solid fa-x text-danger"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td class="text-center" colspan="100" style="font-size: 3vmax ;">No Data Was Found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block JS %}
+<script src="{% static 'Data/table.js' %}"></script>
+{% endblock %}

@@ -26,6 +26,6 @@ class Solve(models.Model):
     solvee = models.ForeignKey("Member",related_name="Solves",on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     problem = models.ForeignKey("Problem", related_name="Solves",on_delete=models.CASCADE)
-    takeaway = models.CharField(max_length=255)
+    takeaway = models.CharField(max_length=255,null=True,blank=True)
     def __str__(self) -> str:
         return f"{self.solvee.discordName}'s solution to {self.problem} on {self.date}"
