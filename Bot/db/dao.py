@@ -70,12 +70,15 @@ class DAO:
 
     def GetMemberStats(self, member: Member):
         joins = self._session.query(Solve).join(Solve.problem).where(Solve.solvee == member)
-        stats = {}
+        retVal = [0, 0, 0]
 
-        for k, name in Constants.DIFFICULTY_MAPPING.items():
-            stats[name] = joins.where(Problem.difficulty == k).count()
-            
-        return stats
+        for k in Constants.DIFFICULTY_MAPPING.keys():
+            retVal[k] = joins.where(Problem.difficulty == k).count()
+
+        return retVal
+
+    def GetTopUsers(self, limit: int = 10):
+        return self._session.query(Member).order_by(Member.num_solutions.desc()).limit(limit).all()
 
     def GetSolution(self, id: int) -> Solve:
         query = select(Solve).where(Solve.id == id)

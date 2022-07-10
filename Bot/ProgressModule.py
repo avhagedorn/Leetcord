@@ -1,3 +1,4 @@
+from typing import List
 import discord
 from discord.ext import commands
 from embed_util import difficulty_color
@@ -132,23 +133,20 @@ class ProgressModule(commands.Cog):
         brief="Gets a user's submission stats.",
         description="Use `.stats <Member>` to get a member's stats. If no member is provided, the caller's stats will be displayed."
     )
-    async def command(self, ctx, discord_member: discord.User):
+    async def command(self, ctx, discord_member: discord.User = None):
+
+        async def display_stats(self, ctx, user):
+            easy, medium, hard = self.client.dao.GetMemberStats(user)
+            embed = discord.Embed(colour=0xff9d5c,title="User Stats",url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",description=f"Total Solved: {easy+medium+hard}\nEasies Solved: {easy}\nMediums Solved: {medium}\nHards Solved: {hard}")
+            embed.set_author(name=user.discordName,url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+            await ctx.reply(embed=embed)
+
         if discord_member:
             member = self.client.dao.GetMember(discord_member.id)
-
-            if member:
-                print(discord_member.id)
-                stats = self.client.dao.GetMemberStats(member)
-                await ctx.reply(stats)
-            else:
-                await ctx.reply(f"@{discord_member.display_name} hasn't been verified yet, cannot fetch stats.")
+            await display_stats(self, ctx, member) if member else await ctx.reply(f"@{discord_member.display_name} hasn't been verified yet, cannot fetch stats.")
         else:
             member = self.client.dao.GetMember(ctx.message.author.id)
-
-            if member:
-                pass
-            else:
-                await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
+            await display_stats(self, ctx, member) if member else await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
 
     @commands.is_owner()
     @commands.command(
@@ -171,7 +169,36 @@ class ProgressModule(commands.Cog):
         embed.set_footer(text=f"Verified on {new_member.date_verified}")
 
         await ctx.reply(embed=embed)
+    
+    @commands.command(
+        name="leeterboard",
+        aliases=["letterboard"],
+        brief="Top 5 users with most solved problems.",
+        description="Top 5 users with most solved problems."
+    )
+    async def leeterboard(self, ctx):
+        users: List[Member] = self.client.dao.GetTopUsers(limit=5)
+        usersString = ""
 
+        for i in range(len(users)):
+            # TODO: fix this n+1 query yikes
+            easy, medium, hard = self.client.dao.GetMemberStats(users[i])
+
+            usersString += \
+                f"""{i+1}. {users[i].discordName}
+                Total Solved: {easy+medium+hard}
+                Easies Solved: {easy}
+                Mediums Solved: {medium}
+                Hards Solved: {hard}
+                ~~               ~~\n"""
+        
+        embed = discord.Embed(
+            colour=0xff9d5c,
+            title="Leeterboard",
+            description=usersString
+        )
+
+        await ctx.reply(embed=embed)
 
     @commands.command(
         name="user",
