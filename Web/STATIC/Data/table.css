@@ -45,3 +45,10 @@ thead tr th {
     border-bottom-color: #32383e !important;
     border-bottom-width: 3px !important;
 }
+
+.fa-lock{
+    opacity: 0.5;
+}
+.fa-lock-open{
+    opacity: 0.5;
+}
