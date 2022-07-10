@@ -4,7 +4,7 @@ from .models import *
 # Create your views here.
 def index(request):
     context = {
-        "Solves" : Solve.objects.all().order_by("-date")[:15]
+        "Solves" : Solve.objects.all().order_by("-date")[:10]
     }
     return render(request, "Data/index.html", context=context)
 
@@ -13,7 +13,7 @@ def solution(request,id):
     if solves:
         context = {
             "solve" : solves,
-            "ProblemSolves":solves.problem.Solves.all().order_by("-date")[:15]
+            "ProblemSolves":solves.problem.Solves.all().order_by("-date")[:10]
         }
     else:
         context = {
@@ -26,7 +26,7 @@ def member(request, discord_id):
     if user:
         context = {
             "member" : user,
-            "userSolves" : user.Solves.all().order_by("-date")[:15]
+            "userSolves" : user.Solves.all().order_by("-date")[:10]
         }
     else:
         context = {
@@ -49,7 +49,7 @@ def problem(request, problem_number):
         if problem:
             context = {
                 "problem" : problem,
-                "solves" : problem.Solves.all().order_by("-date")[:15] 
+                "solves" : problem.Solves.all().order_by("-date")[:10] 
             }
         else:
             context = {
