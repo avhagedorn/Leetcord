@@ -126,6 +126,30 @@ class ProgressModule(commands.Cog):
         else:
             await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
 
+    @commands.command(
+        name="stats",
+        aliases=["st"],
+        brief="Gets a user's submission stats.",
+        description="Use `.stats <Member>` to get a member's stats. If no member is provided, the caller's stats will be displayed."
+    )
+    async def command(self, ctx, discord_member: discord.User):
+        if discord_member:
+            member = self.client.dao.GetMember(discord_member.id)
+
+            if member:
+                print(discord_member.id)
+                stats = self.client.dao.GetMemberStats(member)
+                await ctx.reply(stats)
+            else:
+                await ctx.reply(f"@{discord_member.display_name} hasn't been verified yet, cannot fetch stats.")
+        else:
+            member = self.client.dao.GetMember(ctx.message.author.id)
+
+            if member:
+                pass
+            else:
+                await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
+
     @commands.is_owner()
     @commands.command(
         name="makemember",

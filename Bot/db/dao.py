@@ -68,6 +68,15 @@ class DAO:
         query = select(Member).where(Member.discordID == discordID)
         return self._FindFirst(query)
 
+    def GetMemberStats(self, member: Member):
+        joins = self._session.query(Solve).join(Solve.problem).where(Solve.solvee == member)
+        stats = {}
+
+        for k, name in Constants.DIFFICULTY_MAPPING.items():
+            stats[name] = joins.where(Problem.difficulty == k).count()
+            
+        return stats
+
     def GetSolution(self, id: int) -> Solve:
         query = select(Solve).where(Solve.id == id)
         return self._FindFirst(query)

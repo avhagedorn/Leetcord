@@ -1,3 +1,4 @@
+from enum import Enum
 import os
 import json
 from sqlalchemy.engine import URL
@@ -30,3 +31,9 @@ class Constants:
         Problem,
         Solve,
     ]
+
+    DIFFICULTY_MAPPING = {
+        0 : "Easy",
+        1 : "Medium",
+        2 : "Hard"
+    }
