@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
-from db.db_utils import standardize_difficulty
-from db.models import Member, Solve
+from db.models import Member
 from datetime import datetime
 
 from leetcode_service.leetcode_client import LeetcodeClient
@@ -106,7 +105,7 @@ class ProgressModule(commands.Cog):
         return
 
     @commands.is_owner()
-    @commands.command(name="makemember")
+    @commands.command(name="makemember", alias=["createmember", "makeuser", "createuser"])
     async def makemember(self, ctx, member: discord.User):
         new_member = Member()
         new_member.discordID = member.id
@@ -118,7 +117,7 @@ class ProgressModule(commands.Cog):
 
         await ctx.send(f"Created member for {member.mention}! 🎉")
 
-    @commands.command(name="user")
+    @commands.command(name="user", alias=["member"])
     async def user(self, ctx):
         user_id = ctx.message.author.id
         user = self.client.dao.GetMember(user_id)
