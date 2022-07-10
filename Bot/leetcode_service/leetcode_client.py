@@ -1,3 +1,4 @@
+from Bot.exceptions import NoMatchingQuestions, MalformedResponse, RequestFailed
 from db.db_utils import standardize_difficulty
 from db.models import Problem
 from leetcode_service.leetcode_util import MakeGraphqlQuery, ParseSlugFromUrl
@@ -14,19 +15,11 @@ class LeetcodeClient:
             response = response.json()
             if 'data' in response and 'question' in response['data']:
                 question = response['data']['question']
-
-                problem = Problem()
-                problem.problem_number = question
-                problem.problem_name = question['title']
-                problem.difficulty = standardize_difficulty(question['difficulty'])
-                problem.premium = question['isPaidOnly']
-                problem.slug = slug
-
-                return problem
+                return LeetcodeClient._BuildProblem(question)
             else:
-                raise Exception()
+                raise MalformedResponse()
         else:
-            raise Exception(response.text)
+            raise RequestFailed(response.text)
 
     @staticmethod
     def GetQuestionFromSearch(query: str) -> Problem:
@@ -49,17 +42,25 @@ class LeetcodeClient:
                         or question['titleSlug'].lower() == query.lower() \
                         or question['frontendQuestionId'] == query:
                         
-                        problem = Problem()
-                        problem.problem_number = question['frontendQuestionId']
-                        problem.problem_name = question['title']
-                        problem.difficulty = standardize_difficulty(question['difficulty'])
-                        problem.slug = question['titleSlug']
-                        problem.premium = question['isPaidOnly']
-
-                        return problem
+                        return LeetcodeClient._BuildProblem(question)
                 
-                raise Exception("No questions matched")
+                raise NoMatchingQuestions()
             else:
-                raise Exception("Malformed response")
+                raise MalformedResponse()
         else:
-            raise Exception(response.text)
+            raise RequestFailed(response.text)
+
+    @staticmethod
+    def _BuildProblem(response) -> Problem:
+        problem = Problem()
+
+        try:
+            problem.slug = response['titleSlug']
+            problem.problem_name = response['title']
+            problem.premium = response['isPaidOnly']
+            problem.difficulty = standardize_difficulty(response['difficulty'])
+
+            return problem
+
+        except KeyError:
+            raise MalformedResponse()

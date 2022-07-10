@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, delete, select
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from leetcode_service.leetcode_util import ParseSlugFromUrl
@@ -22,26 +22,50 @@ class DAO:
         return problem
 
     def Solved(self, solvee: Member, problem: Problem):
-        solve = Solve()
-        solve.date = datetime.now()
-        solve.problem = problem
-        solve.solvee = solvee
-        solve.takeaway = ''
+        solution = Solve()
+        solution.date = datetime.now()
+        solution.problem = problem
+        solution.solvee = solvee
+        solution.takeaway = ''
         
         solvee.num_solutions += 1
         self._session.add(solvee)
-        self._session.add(solve)
+        self._session.add(solution)
         self._session.commit()
 
-        return solve
+        return solution
 
+    def UpdateTakeaway(self, solution: Solve, takeaway: str):
+        solution.takeaway = takeaway
+        self._session.add(solution)
+        self._session.commit()
 
+        return solution
 
-    def GetMember(self, discordID: str):
+    def DeleteRow(self, obj):
+        klass = obj.__class__
+
+        if klass in Constants.MODELS:
+            selector = delete(klass).where(klass.id == obj.id)
+            self._session.execute(selector)
+        else:
+            raise Exception(
+                f"""
+                Given row is not a member of the models: {
+                    [klass.__name__ for klass in Constants.MODELS]
+                }    
+                """
+            )
+
+    def GetMember(self, discordID: str) -> Member:
         query = select(Member).where(Member.discordID == discordID)
         return self._FindFirst(query)
+
+    def GetSolution(self, id: int) -> Solve:
+        query = select(Solve).where(Solve.id == id)
+        return self._FindFirst(query)
     
-    def GetProblem(self, search: str, n_args: int):
+    def GetProblem(self, search: str, n_args: int) -> Problem:
 
         if search.isnumeric():
             # Query based on problem number

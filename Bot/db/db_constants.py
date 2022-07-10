@@ -1,6 +1,7 @@
 import os
 import json
 from sqlalchemy.engine import URL
+from db.models import Member, Problem, Solve
 
 if os.path.exists(os.path.join(os.path.dirname(__file__),"config.json")):
     f = open(os.path.join(os.path.dirname(__file__),"config.json"))
@@ -24,3 +25,8 @@ class Constants:
                         query={"odbc_connect": CONNECTION_STRING}
                     )
 
+    MODELS = [
+        Member,
+        Problem,
+        Solve,
+    ]

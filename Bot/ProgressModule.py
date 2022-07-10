@@ -14,37 +14,96 @@ class ProgressModule(commands.Cog):
     @commands.command(name="solved", aliases=["s", "slvd"])
     async def solved(self, ctx, *args):
         user = self.client.dao.GetMember(ctx.message.author.id)
+        n_args = len(args)
 
-        if user:
+        if not user:
+            await ctx.send("You must be a registered member of Leetcord!")
+            return 
 
-            n_args = len(args)
+        if not n_args:
+            await ctx.send("Specify a problem using the format:\n.solved <problem name / slug / url>")
+            return
 
-            if n_args:
-                problem_query = f"{' '.join(args)}"
+        problem_query = ' '.join(args)
+        question = self.client.dao.GetProblem(problem_query, n_args)
 
-                question = self.client.dao.GetProblem(problem_query, n_args)
+        if not question:
+            try:
+                question = LeetcodeClient.GetQuestionFromSearch(problem_query)
+                self.client.dao.MakeProblem(question)
+            except Exception as e:
+                print(e)
+                await ctx.send("An unexpected error occurred. Please reach out if this problem persists.")
+                return
 
-                if not question:
-                    question = LeetcodeClient.GetQuestionFromSearch(problem_query)
-                    self.client.dao.MakeProblem(question)
+        solved = self.client.dao.Solved(user, question)
 
-                # num = question.problem_number
-                # title = question.problem_name
-                # slug = question.slug
-                # difficulty = standardize_difficulty(question.difficulty)
-                # premium = question.premium
-                # url = question._url()
+        await ctx.author.send(
+            f"""
+            Congrats! 🎉\n
+            You just solved {question.problem_name}.\n
+            Your solved ID is: {solved.id}\n
+            View solution at https://leetcode-discord.herokuapp.com/solution/{solved.id}
+            """
+        )
+        return
 
-                solved = self.client.dao.Solved(user, question)
+    @commands.command(name="takeaway", aliases=["t", "tkwy"])
+    async def takeaway(self, ctx, *args):
+        user = self.client.dao.GetMember(ctx.message.author.id)
 
-                # await ctx.send(f"{num}. {title}\n{difficulty}\n{'🔒 Premium' if premium else '🔓 Free'}\n{url}")
-                await ctx.author.send(f"Congrats! 🎉\nYou just solved {question.problem_name}.\nYour solved ID is: {solved.id}\nGo to https://leetcode-discord.herokuapp.com/solution/{solved.id}")
-            else:
-                await ctx.send("dumbass bitch idiot add some question info")
+        if not user:
+            await ctx.send("You must be a registered member of Leetcord!")
+            return
 
-        else:
-            await ctx.send("Join the cool kids club first")
+        if len(args) <= 1 or not args[0].isnumeric():
+            await ctx.send("Invalid input!")
+            return
+        
+        solution_id, *rest = args
+        solution_id = int(solution_id)
+        takeaway = ' '.join(rest)
 
+        solution = self.client.dao.GetSolution(solution_id)
+
+        if not solution:
+            await ctx.send("No such solution exists!")
+            return
+
+        if solution.solvee != user:
+            await ctx.send("Cannot modify takeaway for another user's solution!")
+            return
+        
+        solution = self.client.dao.UpdateTakeaway(solution, takeaway)
+        await ctx.send(f"Successfully updated takeaway. View at https://leetcode-discord.herokuapp.com/solution/{solution.id}")
+        return
+
+    @commands.command(name="delete", alias=["d", "del"])
+    async def delete(self, ctx, solution_id):
+        user = self.client.dao.GetMember(ctx.message.author.id)
+
+        if not user:
+            await ctx.send("You must be a registered member of Leetcord!")
+            return
+        
+        if not solution_id:
+            await ctx.send("No solution ID provided!")
+            return
+        
+        if not solution_id.isnumeric():
+            await ctx.send("Solution ID must be an integer!")
+            return
+
+        solution_id = int(solution_id)
+        solution = self.client.dao.GetSolution(solution_id)        
+
+        if not solution:
+            await ctx.send(f"Solution does not exist for solution ID {solution_id}")            
+            return 
+
+        self.client.dao.DeleteSolve(solution)    
+        await ctx.send(f"Deleted solution with ID {solution_id}")
+        return
 
     @commands.is_owner()
     @commands.command(name="makemember")
@@ -59,12 +118,15 @@ class ProgressModule(commands.Cog):
 
         await ctx.send(f"Created member for {member.mention}! 🎉")
 
-
     @commands.command(name="user")
     async def user(self, ctx):
         user_id = ctx.message.author.id
         user = self.client.dao.GetMember(user_id)
-        await ctx.send(str(user))
+
+        if user:
+            await ctx.send(str(user))
+        else:
+            await ctx.send("You must be a registered member of Leetcord!")
 
     @commands.command(name="neetcode", aliases=["nc"])
     async def neetcode(self, ctx):
