@@ -173,31 +173,32 @@ class ProgressModule(commands.Cog):
     
     @commands.command(
         name="leeterboard",
-        aliases=["letterboard", "leaderboard"],
+        aliases=["letterboard", "leaderboard","lb"],
         brief="Top 5 users with most solved problems.",
         description="Top 5 users with most solved problems."
     )
     async def leeterboard(self, ctx):
         users: List[Member] = self.client.dao.GetTopUsers(limit=5)
-        usersString = ""
 
-        for i in range(len(users)):
-            # TODO: fix this n+1 query yikes
-            easy, medium, hard = self.client.dao.GetMemberStats(users[i])
-
-            usersString += \
-                f"""{i+1}. {users[i].discordName}
-                Total Solved: {easy+medium+hard}
-                Easies Solved: {easy}
-                Mediums Solved: {medium}
-                Hards Solved: {hard}
-                ~~               ~~\n"""
-        
         embed = discord.Embed(
             colour=0xff9d5c,
             title="Leeterboard",
-            description=usersString
+            description="Here are the top individuals who have solved the most LeetCode problems!",
         )
+        TROPHY_CASE = ["🏆","🥇","🥈","🥉","🎉"]
+        for i in range(len(users)):
+            # TODO: fix this n+1 query yikes
+            easy, medium, hard = self.client.dao.GetMemberStats(users[i])
+            embed.add_field(
+                name=f"{TROPHY_CASE[i]} {users[i].discordName}",
+                value=f"""
+                🟩 `Easies Solved:` {easy}
+                🟨 `Mediums Solved:` {medium}
+                🟥 `Hards Solved:` {hard}
+                #️⃣ `Total Solved:` {easy+medium+hard}
+                """,
+                inline=False
+            )
 
         await ctx.reply(embed=embed)
 
