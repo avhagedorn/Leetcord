@@ -1,5 +1,6 @@
 from discord.ext import commands
 from db.dao import DAO
+from SetupModule import SetupModule
 from ProgressModule import ProgressModule
 
 class LeetcodeBot(commands.Bot):
@@ -15,4 +16,5 @@ class LeetcodeBot(commands.Bot):
         self.owner_ids = self.CONFIG.get('admin_ids')
         self.dao = DAO()
         
+        self.add_cog(SetupModule(self))
         self.add_cog(ProgressModule(self))
