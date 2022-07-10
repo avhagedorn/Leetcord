@@ -8,6 +8,10 @@ from leetcode_service.leetcode_client import LeetcodeClient
 
 class ProgressModule(commands.Cog):
 
+    """
+        The data interface for Leetcord. Adds, removes, and modifies data and reflects it on the web-application: https://leetcode-discord.herokuapp.com/
+    """
+
     DIFF_MAPPING = {
         0 : 0x00b8a3,
         1 : 0xffc01e,
@@ -16,7 +20,12 @@ class ProgressModule(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(name="solved", aliases=["s", "slvd"])
+    @commands.command(
+        name="solved", 
+        aliases=["s", "slvd"],
+        brief="Adds a solution to your account.",
+        description="If the user is registered they can run this command by doing `.solved <Leetcode Number/Leetcode Slug/Leetcode URL>` to add a solution to the database. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such."
+    )
     async def solved(self, ctx, *args):
         user = self.client.dao.GetMember(ctx.message.author.id)
 
@@ -58,7 +67,12 @@ class ProgressModule(commands.Cog):
 
 
     @commands.is_owner()
-    @commands.command(name="makemember")
+    @commands.command(
+        name="makemember",
+        brief="Creates a member in the database.",
+        description="Use `.member <Member>` in order to create a new member in the database.",
+        hidden=True
+    )
     async def makemember(self, ctx, member: discord.User):
         new_member = Member()
         new_member.discordID = member.id
@@ -75,7 +89,11 @@ class ProgressModule(commands.Cog):
         await ctx.reply(embed=embed)
 
 
-    @commands.command(name="user")
+    @commands.command(
+        name="user",
+        brief="Displays a user's information",
+        description="Use `.user [Member]`. If a Member is given it will display their number of solutions as well as a link to their information. Otherwise it will display the invoker's information. If the indicated user doesn't exist it will indicate as such."
+    )
     async def user(self, ctx, member: discord.User = None):
         if member:
             user_id = member.id
@@ -90,12 +108,22 @@ class ProgressModule(commands.Cog):
         else:
             await ctx.reply("Unfortunately your account has not been verified yet")
 
-    @commands.command(name="neetcode", aliases=["nc"])
+    @commands.command(
+        name="neetcode", 
+        aliases=["nc"],
+        brief="Link to Neetcode.",
+        description="An excellent selection of leetcode questions."
+    )
     async def neetcode(self, ctx):
         embed = discord.Embed(colour=0xff9d5c,title="🚀 Neetcode",description="An excellent selection of leetcode questions.",url="https://neetcode.io/")
         await ctx.send(embed=embed)
 
-    @commands.command(name="leetcode", aliases=["lc"])
+    @commands.command(
+        name="leetcode", 
+        aliases=["lc"],
+        brief="Link to Leetcode.",
+        description="Your one-stop-shop for coding problems."
+    )
     async def leetcode(self, ctx):
         embed = discord.Embed(colour=0xff9d5c,title="Leetcode",description="Your one-stop-shop for coding problems.",url="https://leetcode.com/problemset/all")
         embed.set_thumbnail(url=self.client.user.avatar_url)
