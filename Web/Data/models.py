@@ -1,6 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_delete
+from Bot.leetcode_service.leetcode_constants import Constants
 
 # Create your models here.
 def update_children(member):
@@ -24,6 +25,9 @@ class Problem(models.Model):
     problem_name = models.CharField(max_length=200)
     slug = models.CharField(max_length=200)
     difficulty = models.SmallIntegerField(choices=DIFFICULTY_CHOICES.choices)
+
+    def _build_url(self, slug):
+        return f"{Constants.PROBLEMS_PATH}/{slug}/"
 
     def __str__(self) -> str:
         return f"Leetcode {self.problem_number} : {self.slug} | {self.get_difficulty_display()}"

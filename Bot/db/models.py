@@ -1,6 +1,8 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, Date, SmallInteger, VARCHAR
+from sqlalchemy import BOOLEAN, Column, String, Integer, ForeignKey, Date, SmallInteger, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+
+from leetcode_service.leetcode_constants import Constants
 
 Base = declarative_base()
 
@@ -12,6 +14,7 @@ class Member(Base):
     discordName = Column('discordName', VARCHAR(35))
     discordPFP = Column('discordPFP', String)
     date_verified = Column('date_verified', Date)
+    num_solutions = Column('num_solutions', Integer)
 
     solutions = relationship('Solve', back_populates='solvee')
 
@@ -23,11 +26,16 @@ class Problem(Base):
     __tablename__ = "data_problem"
 
     id = Column(Integer, primary_key=True)
-    problem_number = Column('problem_number', SmallInteger, primary_key=True)
+    problem_number = Column('problem_number', SmallInteger)
+    problem_name = Column('problem_name', VARCHAR(200))
     slug = Column('slug', VARCHAR(200))
     difficulty = Column('difficulty', SmallInteger)
+    premium = Column('premium', BOOLEAN)
 
     solutions = relationship('Solve', back_populates='problem')
+
+    def _url(self) -> str:
+        return f"{Constants.PROBLEMS_PATH}/{self.slug}"
 
     def __str__(self) -> str:
         return f"Leetcode {self.problem_number} : {self.slug} | {self.difficulty}"

@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
+from db.db_utils import standardize_difficulty
 from db.models import Member
-from db.dao import DAO
 from datetime import datetime
 
 from leetcode_service.leetcode_client import LeetcodeClient
@@ -13,17 +13,28 @@ class ProgressModule(commands.Cog):
 
     @commands.command(name="solved", aliases=["s", "slvd"])
     async def solved(self, ctx, *args):
-        
-        user_id = ctx.message.author.id
-        problem_query = f"{' '.join(args)}"
+        n_args = len(args)
 
-        problem = None # TODO: query from Azure
+        if n_args:
+            problem_query = f"{' '.join(args)}"
 
-        if not problem:
-            # TODO: query from lc, save to Azure
-            question = LeetcodeClient.GetQuestionFromSearch(problem_query)
+            question = self.client.dao.GetProblem(problem_query, n_args)
 
-            await ctx.send(f"{question.title}\n{question.difficulty}\n{question.url}")
+            if not question:
+                question = LeetcodeClient.GetQuestionFromSearch(problem_query)
+                self.client.dao.MakeProblem(question)
+                await ctx.send("Created new entry")
+
+            num = question.problem_number
+            title = question.problem_name
+            slug = question.slug
+            difficulty = standardize_difficulty(question.difficulty)
+            premium = question.premium
+            url = question._url()
+
+            await ctx.send(f"{num}. {title}\n{difficulty}\n{'🔒 Premium' if premium else '🔓 Free'}\n{url}")
+        else:
+            await ctx.send("dumbass bitch")
 
 
     @commands.is_owner()
@@ -45,3 +56,12 @@ class ProgressModule(commands.Cog):
         user_id = ctx.message.author.id
         user = self.client.dao.GetMember(user_id)
         await ctx.send(str(user))
+
+    @commands.command(name="neetcode", aliases=["nc"])
+    async def neetcode(self, ctx):
+        await ctx.send(f"🚀 https://neetcode.io/ 🚀")
+
+    @commands.command(name="leetcode", aliases=["lc"])
+    async def leetcode(self, ctx):
+        await ctx.send(f"🤔 https://leetcode.com/problemset/all 🤔")
+

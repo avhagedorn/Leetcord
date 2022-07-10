@@ -23,6 +23,7 @@ class Constants:
                     frontendQuestionId: questionFrontendId
                     title
                     titleSlug
+                    isPaidOnly
                 }
             }
         }
