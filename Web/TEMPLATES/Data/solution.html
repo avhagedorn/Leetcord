@@ -9,26 +9,29 @@
         <div class="row d-flex justify-content-center">
             {% if solve %}
             <div class="col-auto col-md-5 col-lg-4 col-xl-3 mb-2">
-                <a href="{% url 'Data:member' discord_id=solve.solvee.discordID%}" class="card text-white ml-md-auto mr-md-auto" style="max-width: 18rem;text-decoration: none;">
-                    <img src="{{solve.solvee.discordPFP}}" class="card-img-top rounded-circle" id="PFP" alt="{{solve.solvee.discordName}}'s PFP">
-                    <div class="card-body pt-4 rounded">
+                <div class="card text-white ml-md-auto mr-md-auto" style="max-width: 18rem;text-decoration: none;">
+                    <a href="{% url 'Data:member' discord_id=solve.solvee.discordID%}" class="rounded-circle p-2 bg-dark" id="PFP">
+                        <img src="{{solve.solvee.discordPFP}}" class="card-img-top rounded-circle" alt="{{solve.solvee.discordName}}'s PFP">
+                    </a>
+                    <div class="card-body pt-5 rounded">
                         <h5 class="card-title text-center">{{solve.solvee.discordName}}</h5>
                         <p class="card-text"><strong>Leetcode Number :</strong> {{solve.problem.problem_number}}</p>
                         <p class="card-text"><strong>Problem Name :</strong> {{solve.problem.problem_name | title}}</p>
                         <p class="card-text"><strong>Difficulty :</strong> <span class="diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</span></p>
                         <p class="card-text"><strong>Solved On :</strong> {{solve.date}}</p>
+                        <button class="btn btn-info mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Modify</button>
                         {% if solve.takeaway %}
                         <p class="card-text text-center mt-2"><strong>Takeaway</strong></p>
                         <textarea class="form-control" rows="5" readonly placeholder="{{solve.takeaway}}"></textarea>
                         {% endif %}
                     </div>
-                </a>
+                </div>
             </div>
             <div class="col-12 col-md-7 col-lg-8 col-xl-9">
                 <table class="table table-dark table-hover">
                     <thead>
                         <tr>
-                            <td class="text-center rounded-top" colspan="100">15 Recent Solutions For Leetcode {{solve.problem.problem_number}}</td>
+                            <td class="text-center rounded-top" colspan="100">10 Recent Solutions For Leetcode {{solve.problem.problem_number}}</td>
                         </tr>
                         <tr>
                             <th scope="col">
@@ -47,7 +50,7 @@
                     </thead>
                     <tbody>
                         {% for problem_solve in ProblemSolves %}
-                        <tr data-href="{% url 'Data:solution' id=solve.id %}">
+                        <tr data-href="{% url 'Data:solution' id=problem_solve.id %}">
                             <td scope="row" class="align-text-center">
                                 <img src="{{problem_solve.solvee.discordPFP}}" alt="Leetcode Logo" width="32" height="32" class="d-inline-block rounded-circle">
                                 {{problem_solve.solvee.discordName}}
@@ -80,6 +83,35 @@
             {% endif %}
         </div>
     </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-dark text-white">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modify This Solution</h5>
+            </div>
+            <div class="modal-body">
+              <p class="d-block">In order to run any of the following commands you must be the owner of this solution.</p>
+              <span class="d-block">
+                Add Takeaway: 
+                <strong style="font-family: 'Ubuntu Mono', monospace;">
+                    .takeaway {{solve.id}} "YOUR TAKEAWAY"
+                </strong>
+                <button type="button" data-copy='.takeaway {{solve.id}} "YOUR TAKEAWAY"' class="btn btn-outline-light btn-copy"><i class="fa-solid fa-copy"></i></button>
+            </span>
+              <span class="d-block">
+                Delete Solution: 
+                <strong style="font-family: 'Ubuntu Mono', monospace;">
+                    .delete {{solve.id}}
+                </strong>
+                <button type="button" data-copy=".delete {{solve.id}}" class="btn btn-outline-light btn-copy"><i class="fa-solid fa-copy"></i></button>
+            </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 {% endblock %}
 {% block JS %}
 <script src="{% static 'Data/table.js' %}"></script>

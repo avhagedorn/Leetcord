@@ -51,3 +51,14 @@ body{
 .diff-2 {
 	color: #ff375f;
 }
+
+.modal-dark {
+	color: white;
+	background-color: var(--bs-dark);
+}
+.modal-dark .modal-header{
+	border-bottom: 0px;
+}
+.modal-dark .modal-footer{
+	border-top: 0px;
+}
