@@ -6,9 +6,13 @@ from db.models import Base, Member
 class DAO:
     _instance = None
 
-    def GetUser(self, discordID: str):
+    def GetMember(self, discordID: str):
         query = select(Member).where(Member.discordID == discordID)
         return self._session.execute(query).scalars().first()
+
+    def MakeMember(self, member: Member):
+        self._session.add(member)
+        self._session.commit()
 
     def __new__(cls):
         if cls._instance is None:
