@@ -16,11 +16,14 @@
                     <div class="card-body pt-5 rounded">
                         <h5 class="card-title text-center">{{solve.solvee.discordName}}</h5>
                         <p class="card-text"><strong>Leetcode Number :</strong> {{solve.problem.problem_number}}</p>
-                        <p class="card-text"><strong>Problem Name :</strong> {{solve.problem.problem_name | title}}</p>
+                        <p class="card-text"><strong>Problem Name :</strong> {{solve.problem.problem_name}}</p>
                         <p class="card-text"><strong>Difficulty :</strong> <span class="diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</span></p>
                         <p class="card-text"><strong>Premium? :</strong> {% if solve.problem.premium %}Yes <i class="fa-solid fa-lock"></i> {% else %}No <i class="fa-solid fa-lock-open"></i> {% endif %}</p>
                         <p class="card-text"><strong>Solved On :</strong> {{solve.date}}</p>
-                        <button class="btn btn-info mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Modify</button>
+                        <span class="d-inline-block mt-2">
+                            <a class="btn btn-success" href="https://leetcode.com/problems/{{solve.problem.slug}}/" target="_blank">View Problem</a>
+                            <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">Modify</button>
+                        </span>
                         {% if solve.takeaway %}
                         <p class="card-text text-center mt-2"><strong>Takeaway</strong></p>
                         <textarea class="form-control" rows="5" readonly placeholder="{{solve.takeaway}}"></textarea>

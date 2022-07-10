@@ -12,9 +12,12 @@
                 <div class="card text-white ml-md-auto mr-md-auto" style="max-width: 18rem;text-decoration: none;">
                     <div class="card-body pt-4 rounded">
                         <h5 class="card-title text-center">Leetcode #{{problem.problem_number}}</h5>
-                        <p class="card-text"><strong>Problem Name :</strong> {{problem.problem_name | title}}</p>
+                        <p class="card-text"><strong>Problem Name :</strong> {{problem.problem_name}}</p>
                         <p class="card-text"><strong>Difficulty :</strong> <span class="diff-{{problem.difficulty}}">{{problem.get_difficulty_display}}</span></p>
                         <p class="card-text"><strong>Premium? :</strong> {% if problem.premium %}Yes <i class="fa-solid fa-lock"></i> {% else %}No <i class="fa-solid fa-lock-open"></i> {% endif %}</p>
+                        <span class="d-inline-block mt-2">
+                            <a class="btn btn-success" href="https://leetcode.com/problems/{{problem.slug}}/" target="_blank">View Problem</a>
+                        </span>
                     </div>
                 </div>
             </div>
