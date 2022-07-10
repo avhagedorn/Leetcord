@@ -16,8 +16,4 @@ TOKEN = load('DISCORD_TOKEN')
 lcb = LeetcodeBot()
 lcb.help_command = LeetcordHelpCommand()
 
-@lcb.event
-async def on_ready():
-    print(f"{lcb.user} is online")
-
 lcb.run(TOKEN)
