@@ -114,8 +114,9 @@ class ProgressModule(commands.Cog):
                     if solution:
                         if solution.solvee == user:
                             problem = solution.problem
-                            self.client.dao.DeleteSolution(solution)    
-                            await ctx.reply(f"Deleted solution with ID {solution_id} for {problem.problem_number}. {problem.problem_name}")
+                            self.client.dao.DeleteSolution(solution)
+                            embed = discord.Embed(colour=0xff9d5c,title="Solution Deleted!",description=f"Solution number {solution_id}, Leetcode {problem.problem_number}. {problem.problem_name} was deleted.")
+                            await ctx.send(embed=embed)
                         else:
                             await ctx.reply("Cannot delete a different user's solution!")
                     else:
@@ -172,7 +173,7 @@ class ProgressModule(commands.Cog):
     
     @commands.command(
         name="leeterboard",
-        aliases=["letterboard"],
+        aliases=["letterboard", "leaderboard"],
         brief="Top 5 users with most solved problems.",
         description="Top 5 users with most solved problems."
     )
