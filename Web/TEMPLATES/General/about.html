@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block CSS %}
+<link rel="stylesheet" href="{% static 'General/cards.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <!-- What is Leetcord?-->
+    <div class="row d-flex justify-content-center justify-content-lg-start my-4">
+        <div class="col-lg-1"></div>
+        <div class="col-12 col-md-9">
+            <div class="card text-white bg-dark rounded-end">
+                <div class="row g-0 align-items-center justify-content-between">
+                    <div class="col-lg-8">
+                        <div class="card-body">
+                            <h2 class="card-title">What Is Leetcord?</h2>
+                            <p class="card-text">
+                                Leetcord is an application that provides an integration between Discord and LeetCode to create
+                                a fun and interactive platform for users to share, compare, or store solutions with their friends.
+                                The application is designed to store short takeaways such that individuals can learn from one another.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <img src="{% static 'General/Integration.webp' %}" class="img-fluid rounded-start" alt="Discord and Leetcode Integration">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- How is Leetcord? -->
+    <div class="row d-flex justify-content-center justify-content-lg-end my-4">
+        <div class="col-12 col-md-9">
+            <div class="card text-white bg-dark rounded-start text-lg-end">
+                <div class="card-body">
+                    <h2 class="card-title">How Does It Work?</h2>
+                    <p class="card-text">
+                        Leetcord primarily interfaces with the user through the bot present in Discord. On every command it syncs its data with
+                        the webserver, it's how they both maintain the same data. While Discord's interface is excellent as a medium between computers
+                        and users, it lacks the ability to display data effectively. The web server, on the other hand, is excellent in providing intuitive
+                        visuals that allow users to visualize their data.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+    <!-- Who is Leetcord? -->
+    <div class="row d-flex justify-content-center justify-content-lg-start my-4">
+        <div class="col-lg-1"></div>
+        <div class="col-12 col-md-9">
+            <div class="card text-white bg-dark rounded-end">
+                <div class="card-body">
+                    <h2 class="card-title">Who Is Leetcord?</h2>
+                    <p class="card-text">
+                        The idea for LeetCord was developed by Kanishk Kacholia and Alan Hagedorn, students at the University of Minnesota - Twin Cities, who wanted
+                        a better tool to enhance their learning as they practiced coding challenges on LeetCode. The project was initially a simple discord bot that managed
+                        inputs but eventually spiraled out to include a web server and interactivity between them both. Within three days the project went from having nothing to
+                        being a deployed functioning prototype that users could interact with.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

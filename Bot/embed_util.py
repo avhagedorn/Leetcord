@@ -1,6 +1,3 @@
-from numpy import diff
-
-
 def difficulty_color(difficulty: int):
     DIFF_MAPPING = {
         0 : 0x00b8a3,
