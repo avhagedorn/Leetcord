@@ -21,6 +21,7 @@ class Problem(models.Model):
         MEDIUM = 1, "Medium"
         HARD = 2, "Hard"
     problem_number = models.SmallIntegerField()
+    problem_name = models.CharField(max_length=200)
     slug = models.CharField(max_length=200)
     difficulty = models.SmallIntegerField(choices=DIFFICULTY_CHOICES.choices)
 

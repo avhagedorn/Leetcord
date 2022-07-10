@@ -12,7 +12,7 @@
                 <div class="card text-white ml-md-auto mr-md-auto" style="max-width: 18rem;text-decoration: none;">
                     <div class="card-body pt-4 rounded">
                         <h5 class="card-title text-center">Leetcode #{{problem.problem_number}}</h5>
-                        <p class="card-text"><strong>Problem Name :</strong> {{problem.slug | title}}</p>
+                        <p class="card-text"><strong>Problem Name :</strong> {{problem.problem_name | title}}</p>
                         <p class="card-text"><strong>Difficulty :</strong> <span class="diff-{{problem.difficulty}}">{{problem.get_difficulty_display}}</span></p>
                     </div>
                 </div>

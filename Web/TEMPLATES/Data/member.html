@@ -14,6 +14,7 @@
                     <div class="card-body pt-4 rounded">
                         <h5 class="card-title text-center">{{member.discordName}}</h5>
                         <p class="card-text"><strong><i class="fa-solid fa-circle-check text-info"></i> Verified On :</strong> {{member.date_verified}}</p>
+                        <p class="card-text"><strong><i class="fa-solid fa-hashtag"></i></i> Number of Solutions :</strong> {{member.num_solutions}}</p>
                     </div>
                 </div>
             </div>
@@ -45,7 +46,7 @@
                     <tbody>
                         {% for solve in userSolves %}
                         <tr data-href="{% url 'Data:solution' id=solve.id %}">
-                            <td>{{solve.problem.problem_number}} <p class="d-none d-md-inline"><i class="fa-solid fa-arrow-right"></i> {{solve.problem.slug | title}}</p></td>
+                            <td>{{solve.problem.problem_number}} <p class="d-none d-md-inline"><i class="fa-solid fa-arrow-right"></i> {{solve.problem.problem_name | title}}</p></td>
                             <td class="diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</td>
                             <td class="md-round">
                                 {% if solve.takeaway %}
