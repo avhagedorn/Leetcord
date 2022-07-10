@@ -13,7 +13,7 @@ class GraphqlQueryBuilder:
         }
     
     @staticmethod
-    def BuildSearchQuery(query, limit=1):
+    def BuildSearchQuery(query, limit=5):
         return {
             'query' : Constants.PROBLEMSET_QUERY,
             'operationName' : Constants.PROBLEMSET_OPERATION,

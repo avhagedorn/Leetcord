@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 from leetcode_service.leetcode_util import ParseSlugFromUrl
 from db.models import Problem, Solve
 from db.db_constants import Constants
@@ -12,13 +13,27 @@ class DAO:
         self._session.add(member)
         self._session.commit()
 
+        return member
+
     def MakeProblem(self, problem: Problem):
         self._session.add(problem)
         self._session.commit()
 
-    def Solve(self, solve: Solve):
+        return problem
+
+    def Solved(self, solvee: Member, problem: Problem):
+        solve = Solve()
+        solve.date = datetime.now()
+        solve.problem = problem
+        solve.solvee = solvee
+        solve.takeaway = ''
+        
+        solvee.num_solutions += 1
+        self._session.add(solvee)
         self._session.add(solve)
         self._session.commit()
+
+        return solve
 
 
 
