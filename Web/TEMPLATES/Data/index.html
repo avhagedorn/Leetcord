@@ -42,7 +42,11 @@
                         <img src="{{solve.solvee.discordPFP}}" alt="Leetcode Logo" width="32" height="32" class="d-inline-block rounded-circle">
                         {{solve.solvee.discordName}}
                     </td>
-                    <td>{{solve.problem.problem_number}}<p class="d-none d-md-inline">.) {{solve.problem.problem_name | title}}</p></td>
+                    <td>
+                        {% if solve.problem.premium %}<i class="fa-solid fa-lock"></i> {% else %}<i class="fa-solid fa-lock-open"></i> {% endif %}
+                        {{solve.problem.problem_number}}
+                        <p class="d-none d-md-inline">.) {{solve.problem.problem_name | title}}</p>
+                    </td>
                     <td class="sm-round diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</td>
                     <td class="md-round d-none d-md-table-cell">{{solve.date}}</td>
                     <td class="d-none d-lg-table-cell">

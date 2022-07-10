@@ -18,6 +18,7 @@
                         <p class="card-text"><strong>Leetcode Number :</strong> {{solve.problem.problem_number}}</p>
                         <p class="card-text"><strong>Problem Name :</strong> {{solve.problem.problem_name | title}}</p>
                         <p class="card-text"><strong>Difficulty :</strong> <span class="diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</span></p>
+                        <p class="card-text"><strong>Premium? :</strong> {% if solve.problem.premium %}Yes <i class="fa-solid fa-lock"></i> {% else %}No <i class="fa-solid fa-lock-open"></i> {% endif %}</p>
                         <p class="card-text"><strong>Solved On :</strong> {{solve.date}}</p>
                         <button class="btn btn-info mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Modify</button>
                         {% if solve.takeaway %}
