@@ -48,7 +48,7 @@
                     <tbody>
                         {% for solve in userSolves %}
                         <tr data-href="{% url 'Data:solution' id=solve.id %}">
-                            <td>{{solve.problem.problem_number}} <p class="d-none d-md-inline"><i class="fa-solid fa-arrow-right"></i> {{solve.problem.problem_name | title}}</p></td>
+                            <td>{{solve.problem.problem_number}}<p class="d-none d-md-inline">.) {{solve.problem.problem_name | title}}</p></td>
                             <td class="diff-{{solve.problem.difficulty}}">{{solve.problem.get_difficulty_display}}</td>
                             <td class="md-round">
                                 {% if solve.takeaway %}
