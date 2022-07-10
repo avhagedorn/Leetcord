@@ -13,7 +13,10 @@ def load(key):
 
 TOKEN = load('DISCORD_TOKEN')
 
+IS_TEST = os.getenv('DISCORD_TOKEN') == None
+
 lcb = LeetcodeBot()
 lcb.help_command = LeetcordHelpCommand()
 
-lcb.run(TOKEN)
+if IS_TEST:
+    lcb.run(TOKEN)

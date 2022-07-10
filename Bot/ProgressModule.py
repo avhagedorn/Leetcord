@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+from embed_util import difficulty_color
+from db.db_utils import standardize_difficulty
 from db.models import Member
 from datetime import datetime
 
@@ -11,11 +13,6 @@ class ProgressModule(commands.Cog):
         The data interface for Leetcord. Adds, removes, and modifies data and reflects it on the web-application: https://leetcode-discord.herokuapp.com/
     """
 
-    DIFF_MAPPING = {
-        0 : 0x00b8a3,
-        1 : 0xffc01e,
-        2 : 0xff375f
-    }
     def __init__(self, client):
         self.client = client
 
@@ -26,43 +23,6 @@ class ProgressModule(commands.Cog):
         description="If the user is registered they can run this command by doing `.solved <Leetcode Number/Leetcode Slug/Leetcode URL>` to add a solution to the database. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such."
     )
     async def solved(self, ctx, *args):
-        user = self.client.dao.GetMember(ctx.message.author.id)
-        n_args = len(args)
-
-        if not user:
-            await ctx.send("You must be a registered member of Leetcord!")
-            return 
-
-        if not n_args:
-            await ctx.send("Specify a problem using the format:\n.solved <problem name / slug / url>")
-            return
-
-        problem_query = ' '.join(args)
-        question = self.client.dao.GetProblem(problem_query, n_args)
-
-        if not question:
-            try:
-                question = LeetcodeClient.GetQuestionFromSearch(problem_query)
-                self.client.dao.MakeProblem(question)
-            except Exception as e:
-                print(e)
-                await ctx.send("An unexpected error occurred. Please reach out if this problem persists.")
-                return
-
-        solved = self.client.dao.Solved(user, question)
-
-        await ctx.author.send(
-            f"""
-            Congrats! 🎉\n
-            You just solved {question.problem_name}.\n
-            Your solved ID is: {solved.id}\n
-            View solution at https://leetcode-discord.herokuapp.com/solution/{solved.id}
-            """
-        )
-        return
-
-    @commands.command(name="takeaway", aliases=["t", "tkwy"])
-    async def takeaway(self, ctx, *args):
         user = self.client.dao.GetMember(ctx.message.author.id)
 
         if user:
@@ -75,54 +35,96 @@ class ProgressModule(commands.Cog):
                 question = self.client.dao.GetProblem(problem_query, n_args)
 
                 if not question:
-                    question = LeetcodeClient.GetQuestionFromSearch(problem_query)
-                    self.client.dao.MakeProblem(question)
-
-                # num = question.problem_number
-                # title = question.problem_name
-                # slug = question.slug
-                # difficulty = standardize_difficulty(question.difficulty)
-                # premium = question.premium
-                # url = question._url()
+                    try:
+                        question = LeetcodeClient.GetQuestionFromSearch(problem_query)
+                        self.client.dao.MakeProblem(question)
+                    except Exception as e:
+                        print(e)
+                        await ctx.reply("An unexpected error occurred. If this issue persists, contact Alan or Kanishk.")
+                    
                 solved = self.client.dao.Solved(user, question)
 
-                # await ctx.send(f"{num}. {title}\n{difficulty}\n{'🔒 Premium' if premium else '🔓 Free'}\n{url}")
-                
-                embed = discord.Embed(colour=self.DIFF_MAPPING[question.difficulty],title="Solution Added!",url=f"https://leetcode-discord.herokuapp.com/solution/{solved.id}",description=f"Congratulations on solving Leetcode {standardize_difficulty(question.difficulty)} {question.problem_number} : {question.problem_name}.\nClick on the title to see your solution!\nDo `.takeaway {solved.id} \"YOUR TAKEAWAY\"` to add a takeaway.\nDo `.delete {solved.id}` to remove your solution.")
+                embed = discord.Embed(colour=difficulty_color(question.difficulty),title="Solution Added!",url=f"https://leetcode-discord.herokuapp.com/solution/{solved.id}",description=f"Congratulations on solving Leetcode {standardize_difficulty(question.difficulty)} {question.problem_number} : {question.problem_name}.\nClick on the title to see your solution!\nDo `.takeaway {solved.id} \"YOUR TAKEAWAY\"` to add a takeaway.\nDo `.delete {solved.id}` to remove your solution.")
                 embed.set_author(name=user.discordName,url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+
                 if question.premium:
                     embed.set_footer(text="This is a premium question.")
-
 
                 await ctx.reply(embed=embed)
             else:
                 await ctx.reply("No information was provided, couldn't indentify a leetcode question.")
-
         else:
             await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
 
-        if not user:
-            await ctx.send("You must be a registered member of Leetcord!")
-            return
-        
-        if not solution_id:
-            await ctx.send("No solution ID provided!")
-            return
-        
-        if not solution_id.isnumeric():
-            await ctx.send("Solution ID must be an integer!")
-            return
+    @commands.command(
+        name="takeaway",
+        aliases=["t", "tkwy"],
+        brief="Adds a takeaway to your solution.",
+        description="If the user is registered and is associated with a solution they can run this command by doing `.takeaway <SolvedID> <Takeaway>` to add a takaway to the solution. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such."
+    )
+    async def takeaway(self, ctx, *args):
+        user = self.client.dao.GetMember(ctx.message.author.id)
 
-        solution_id = int(solution_id)
-        solution = self.client.dao.GetSolution(solution_id)        
+        if user:
+            if len(args) > 1 and args[0].isnumeric():
+                solution_id, *rest = args
+                solution_id = int(solution_id)
+                takeaway = ' '.join(rest)
 
-        if not solution:
-            await ctx.send(f"Solution does not exist for solution ID {solution_id}")            
-            return 
+                solution = self.client.dao.GetSolution(solution_id)
 
-        self.client.dao.DeleteSolve(solution)    
-        await ctx.send(f"Deleted solution with ID {solution_id}")
-        return
+                if solution:
+                    if solution.solvee == user:
+                        solution = self.client.dao.UpdateTakeaway(solution, takeaway)
+
+                        embed = discord.Embed(colour=difficulty_color(solution.problem.difficulty),title="Takeaway Updated!",url=f"https://leetcode-discord.herokuapp.com/solution/{solution.id}",description=f"Takway updated successfully.\nClick on the title to see your solution!\nDo `.takeaway {solution.id} \"YOUR TAKEAWAY\"` to update this takeaway.\nDo `.delete {solution.id}` to remove your solution.")
+                        embed.set_author(name=user.discordName,url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+                        
+                        if solution.problem.premium:
+                            embed.set_footer(text="This is a premium question.")
+
+                        await ctx.reply(embed=embed)
+                    
+                    else:
+                        await ctx.reply("Cannot modify takeaway for another user's solution!")
+                else:
+                    await ctx.reply("No such solution exists!")
+            else:
+                await ctx.reply("Not enough information was provided, or SolvedID is not valid.")
+        else:
+            await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
+
+
+    @commands.command(
+        name="delete", 
+        aliases=["d", "del"],
+        brief="Deletes a solution.",
+        description="Use `.delete <SolveID>` to delete a solution. The user attempting a delete must have created the solution."
+    )
+    async def delete(self, ctx, solution_id):
+        user = self.client.dao.GetMember(ctx.message.author.id)
+
+        if user:
+            if solution_id:
+                if solution_id.isnumeric():
+                    solution_id = int(solution_id)
+                    solution = self.client.dao.GetSolution(solution_id)
+
+                    if solution:
+                        if solution.solvee == user:
+                            problem = solution.problem
+                            self.client.dao.DeleteSolution(solution)    
+                            await ctx.reply(f"Deleted solution with ID {solution_id} for {problem.problem_number}. {problem.problem_name}")
+                        else:
+                            await ctx.reply("Cannot delete a different user's solution!")
+                    else:
+                        await ctx.reply(f"Solution does not exist for SolveID: {solution_id}")                             
+                else:
+                    await ctx.reply("SolvedID was not an integer.")
+            else:
+                await ctx.reply("SolvedID was not provided.")
+        else:
+            await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
 
     @commands.is_owner()
     @commands.command(

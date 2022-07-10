@@ -42,12 +42,19 @@ class DAO:
 
         return solution
 
+    def DeleteSolution(self, solution):
+        solvee = solution.solvee
+        solvee.num_solutions -= 1
+        self._session.add(solvee)
+        self.DeleteRow(solution)
+
     def DeleteRow(self, obj):
         klass = obj.__class__
 
         if klass in Constants.MODELS:
-            selector = delete(klass).where(klass.id == obj.id)
-            self._session.execute(selector)
+            self._session.delete(obj)
+            self._session.commit()
+            
         else:
             raise Exception(
                 f"""

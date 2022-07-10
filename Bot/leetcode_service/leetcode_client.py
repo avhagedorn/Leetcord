@@ -1,4 +1,4 @@
-from Bot.exceptions import NoMatchingQuestions, MalformedResponse, RequestFailed
+from exceptions import NoMatchingQuestions, MalformedResponse, RequestFailed
 from db.db_utils import standardize_difficulty
 from db.models import Problem
 from leetcode_service.leetcode_util import MakeGraphqlQuery, ParseSlugFromUrl
@@ -58,6 +58,7 @@ class LeetcodeClient:
             problem.slug = response['titleSlug']
             problem.problem_name = response['title']
             problem.premium = response['isPaidOnly']
+            problem.problem_number = response['frontendQuestionId']
             problem.difficulty = standardize_difficulty(response['difficulty'])
 
             return problem
