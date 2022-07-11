@@ -205,7 +205,7 @@ class ProgressModule(commands.Cog):
     @commands.command(
         name="user",
         brief="Displays a user's information",
-        description="Use `.user [Member]`. If a Member is given it will display their number of solutions as well as a link to their information. Otherwise it will display the invoker's information. If the indicated user doesn't exist it will indicate as such."
+        description="Use `.user [Member]`. If a Member is given it will display their number of solutions as well as a link to their information. Otherwise it will display the invoker's information. If the user doesn't exist it will indicate as such."
     )
     async def user(self, ctx, member: discord.User = None):
         if member:

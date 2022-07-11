@@ -4,4 +4,41 @@
 <link rel="stylesheet" href="{% static 'General/cards.css' %}">
 {% endblock %}
 {% block body %}
+<div class="container">
+    <div class="row pb-2">
+        <div class="col-12">
+            <div class="card text-white bg-dark">
+                <div class="card-header">
+                    <h3>Progress Module</h3>
+                </div>
+                <div class="card-body">
+                    <p>Solved: <span class="command rounded p-1">.solved [Leetcode Number/Leetcode Slug/Leetcode URL]</span> 
+                        If the user is registered they can add a solution to the database. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such.
+                    </p>
+                    <p>Add Takeaway: <span class="command rounded p-1">.takeaway [Solve ID] (Takeaway)</span> 
+                        If the user is registered and is associated with a solution they can add a takaway to their solution. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such.
+                    </p>
+                    <p>Delete Solution: <span class="command rounded p-1">.delete [Solve ID]</span> 
+                        If the user is registered and is associated with a solution they can delete it.
+                    </p>
+                    <p>Get Stats: <span class="command rounded p-1">.stats (Mention)</span> 
+                        Gets a member's stats. If no member is provided, the caller's stats will be displayed.
+                    </p>
+                    <p>Leeterboard: <span class="command rounded p-1">.leeterboard</span> 
+                        Display's the top 5 users with most solved problems.
+                    </p>
+                    <p>Get User Info: <span class="command rounded p-1">.user (Mention)</span> 
+                        If a Member is given it will display their number of solutions as well as a link to their information. Otherwise it will display the invoker's information. If the user doesn't exist it will indicate as such.
+                    </p>
+                    <p>NeetCode: <span class="command rounded p-1">.neetcode</span> 
+                        Provides a link to Neetcode.
+                    </p>
+                    <p>LeetCode: <span class="command rounded p-1">.leetcode</span> 
+                        Provides a link to LeetCode.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

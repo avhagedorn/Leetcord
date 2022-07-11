@@ -70,3 +70,8 @@ body{
 .collapsed .fa-circle-chevron-down{
 	transform: rotate(90deg);
 }
+
+.command{
+	font-family: 'Ubuntu Mono', monospace;
+	background-color: black;
+}
