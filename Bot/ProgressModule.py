@@ -138,8 +138,8 @@ class ProgressModule(commands.Cog):
 
         async def display_stats(self, ctx, user):
             easy, medium, hard = self.client.dao.GetMemberStats(user)
-            embed = discord.Embed(colour=0xff9d5c,title="User Stats",url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",description=f"Total Solved: {easy+medium+hard}\nEasies Solved: {easy}\nMediums Solved: {medium}\nHards Solved: {hard}")
-            embed.set_author(name=user.discordName,url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+            embed = discord.Embed(colour=0xff9d5c,title="User Stats",url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",description=f"🟩`Easies Solved:` {easy}\n🟨`Mediums Solved:` {medium}\n🟥`Hards Solved:` {hard}\n#️⃣`Total Solved:` {easy+medium+hard}")
+            embed.set_author(name=f"{user.discordName}'s Stats",url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
             await ctx.reply(embed=embed)
 
         if discord_member:
@@ -191,12 +191,7 @@ class ProgressModule(commands.Cog):
             easy, medium, hard = self.client.dao.GetMemberStats(users[i])
             embed.add_field(
                 name=f"{TROPHY_CASE[i]} {users[i].discordName}",
-                value=f"""
-                🟩 `Easies Solved:` {easy}
-                🟨 `Mediums Solved:` {medium}
-                🟥 `Hards Solved:` {hard}
-                #️⃣ `Total Solved:` {easy+medium+hard}
-                """,
+                value=f"🟩 `Easies Solved:` {easy}\n🟨 `Mediums Solved:` {medium}\n🟥 `Hards Solved:` {hard}\n#️⃣ `Total Solved:` {easy+medium+hard}",
                 inline=False
             )
 
