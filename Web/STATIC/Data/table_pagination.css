@@ -2,6 +2,13 @@
 table thead tr:first-of-type td{
     border-bottom: 0px;
 }
+table tbody tr td {
+    border-bottom-width: 0px !important;
+}
+
+table tbody tr {
+    cursor: pointer;
+}
 
 /* Remove Bootstrap's bottom borders on the bottom row  */
 tfoot tr:last-of-type td {

@@ -25,7 +25,8 @@
                         <p class="card-text"><strong>Premium? :</strong> {% if solve.problem.premium %}Yes <i class="fa-solid fa-lock"></i> {% else %}No <i class="fa-solid fa-lock-open"></i> {% endif %}</p>
                         <p class="card-text"><strong>Solved On :</strong> {{solve.date}}</p>
                         <span class="d-inline-block mt-2">
-                            <a class="btn btn-success" href="https://leetcode.com/problems/{{solve.problem.slug}}/" target="_blank">View Problem</a>
+                            <a class="btn btn-warning mb-2" href="https://leetcode.com/problems/{{solve.problem.slug}}/" target="_blank">View LeetCode</a>
+                            <a class="btn btn-success" href="{% url 'Data:problem' problem_number=solve.problem.problem_number%}">View Problem</a>
                             <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">Modify</button>
                         </span>
                         {% if solve.takeaway %}

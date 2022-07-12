@@ -2,7 +2,13 @@
 table thead tr:first-of-type td{
     border-bottom: 0px;
 }
+table tbody tr td {
+    border-bottom-width: 0px !important;
+}
 
+table tbody tr {
+    cursor: pointer;
+}
 
 /* Round up to the column labeled .sm-round */
 tbody tr:last-of-type td:first-of-type{
