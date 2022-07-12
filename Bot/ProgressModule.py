@@ -218,9 +218,9 @@ class ProgressModule(commands.Cog):
 
     @commands.command(
         name="dailyquestion",
-        aliases=["daily", "questionoftoday", "today"],
+        aliases=["daily", "questionoftoday", "today","dq"],
         brief="The question of the day.",
-        description="The question of the day."
+        description="Fetches the question of the day from Leetcode."
     )
     async def dailyquestion(self, ctx):
         question = LeetcodeClient.GetQuestionOfToday()

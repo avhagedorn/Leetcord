@@ -20,7 +20,7 @@ class Problem(models.Model):
         EASY = 0, "Easy"
         MEDIUM = 1, "Medium"
         HARD = 2, "Hard"
-    problem_number = models.SmallIntegerField()
+    problem_number = models.SmallIntegerField(unique=True)
     problem_name = models.CharField(max_length=200)
     premium = models.BooleanField()
     slug = models.CharField(max_length=200)
