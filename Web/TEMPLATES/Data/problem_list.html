@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Leetcord{% endblock %}
+{% block CSS %}
+    {% if pagination %}
+        <link rel="stylesheet" href="{% static 'Data/table_pagination.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'Data/table.css' %}">
+    {% endif %}    
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row d-flex justify-content-center px-2">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <td class="text-center rounded-top" colspan="100">Problem List</td>
+                </tr>
+                <tr>
+                    <th scope="col">
+                        <p class="d-inline d-lg-none">LC# </p>
+                        <p class="d-none d-lg-inline"><i class="fa-solid fa-circle-exclamation"></i> Leetcode Name</p>
+                    </th>
+                    <th scope="col">
+                        <i class="fa-solid fa-chart-line"> </i>
+                        Difficulty
+                    </th>
+                    <th scope="col">
+                        <i class="fa-solid fa-calendar-day"> </i>
+                        Premium?
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for problem in Problems %}
+                <tr data-href="{% url 'Data:problem' problem_number=problem.problem_number %}">
+                    <td>
+                        {{problem.problem_number}}
+                        <p class="d-none d-md-inline">.) {{problem.problem_name}}</p>
+                    </td>
+                    <td class="diff-{{problem.difficulty}}">{{problem.get_difficulty_display}}</td>
+                    <td class="md-round">
+                        {% if problem.premium %}
+                        <i class="fa-solid fa-lock"></i>
+                        {% else %}
+                        <i class="fa-solid fa-lock-open"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td class="text-center rounded-bottom" colspan="100" style="font-size: 3vmax ;">No Data Was Found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% if pagination %}
+            <tfoot>
+                <tr>
+                    <td class="rounded-bottom" colspan="100">
+                        <div class="pagination d-flex justify-content-center">
+                            <span class="step-links">
+                                {% if Problems.has_previous %}
+                                    <a class="btn btn-outline-info" href="?page=1"><i class="fa-solid fa-angles-left"></i></a>
+                                    <a class="btn btn-outline-info" href="?page={{ Problems.previous_page_number }}"><i class="fa-solid fa-angle-left"></i></a>
+                                {% endif %}
+                        
+                                <span class="current">
+                                    Page {{ Problems.number }} of {{ Problems.paginator.num_pages }}.
+                                </span>
+                        
+                                {% if Problems.has_next %}
+                                    <a class="btn btn-outline-info" href="?page={{ Problems.next_page_number }}"><i class="fa-solid fa-angle-right"></i></a>
+                                    <a class="btn btn-outline-info" href="?page={{ Problems.paginator.num_pages }}"><i class="fa-solid fa-angles-right"></i></a>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block JS %}
+<script src="{% static 'Data/table.js' %}"></script>
+{% endblock %}

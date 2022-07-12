@@ -1,0 +1,34 @@
+/* Title Row Formatting */
+table thead tr:first-of-type td{
+    border-bottom: 0px;
+}
+table tbody tr td {
+    border-bottom-width: 0px !important;
+}
+
+table tbody tr {
+    cursor: pointer;
+}
+
+/* Remove Bootstrap's bottom borders on the bottom row  */
+tfoot tr:last-of-type td {
+    border-bottom-width: 0px;
+}
+
+/* Ensure that the border after the head is visible */
+thead tr th {
+    border-bottom-color: #32383e !important;
+    border-bottom-width: 3px !important;
+}
+
+tfoot tr td {
+    border-top-color: #32383e !important;
+    border-top-width: 3px !important;
+}
+
+.fa-lock{
+    opacity: 0.5;
+}
+.fa-lock-open{
+    opacity: 0.5;
+}
