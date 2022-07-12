@@ -224,7 +224,11 @@ class ProgressModule(commands.Cog):
     )
     async def dailyquestion(self, ctx):
         question = LeetcodeClient.GetQuestionOfToday()
-        self.client.dao.MakeProblem(question)
+
+        # TODO: Optimize this if possible, also edit embed.
+        problem = self.client.dao._GetProblemByNumber(question.problem_number)
+        if not problem:
+            self.client.dao.MakeProblem(question)
         embed = discord.Embed(
             url=question._url(),
             title=question.problem_name,
