@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block CSS %}
-<link rel="stylesheet" href="{% static 'Data/userCard.css' %}"></link>
-<link rel="stylesheet" href="{% static 'Data/table.css' %}">
+    <link rel="stylesheet" href="{% static 'Data/userCard.css' %}"></link>
+    {% if pagination %}
+        <link rel="stylesheet" href="{% static 'Data/table_pagination.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'Data/table.css' %}">
+    {% endif %}    
 {% endblock %}
 {% block body %}
     <div class="container">
@@ -24,7 +28,7 @@
                 <table class="table table-dark table-hover">
                     <thead>
                         <tr>
-                            <td class="text-center rounded-top" colspan="100">Last 10 Solutions By {{member.discordName}}</td>
+                            <td class="text-center rounded-top" colspan="100">Recent Solutions By {{member.discordName}}</td>
                         </tr>
                         <tr>
                             <th scope="col">
@@ -69,6 +73,31 @@
                         </tr>
                         {% endfor %}
                     </tbody>
+                    {% if pagination %}
+                    <tfoot>
+                        <tr>
+                            <td class="rounded-bottom" colspan="100">
+                                <div class="pagination d-flex justify-content-center">
+                                    <span class="step-links">
+                                        {% if solves_page.has_previous %}
+                                            <a class="btn btn-outline-info" href="?page=1"><i class="fa-solid fa-angles-left"></i></a>
+                                            <a class="btn btn-outline-info" href="?page={{ solves_page.previous_page_number }}"><i class="fa-solid fa-angle-left"></i></a>
+                                        {% endif %}
+                                
+                                        <span class="current">
+                                            Page {{ solves_page.number }} of {{ solves_page.paginator.num_pages }}.
+                                        </span>
+                                
+                                        {% if solves_page.has_next %}
+                                            <a class="btn btn-outline-info" href="?page={{ solves_page.next_page_number }}"><i class="fa-solid fa-angle-right"></i></a>
+                                            <a class="btn btn-outline-info" href="?page={{ solves_page.paginator.num_pages }}"><i class="fa-solid fa-angles-right"></i></a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    {% endif %}
                 </table>
             </div>
             {% else %}

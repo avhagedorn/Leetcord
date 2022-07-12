@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block CSS %}
-<link rel="stylesheet" href="{% static 'Data/userCard.css' %}"></link>
-<link rel="stylesheet" href="{% static 'Data/table.css' %}">
+    <link rel="stylesheet" href="{% static 'Data/userCard.css' %}"></link>
+    {% if pagination %}
+        <link rel="stylesheet" href="{% static 'Data/table_pagination.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'Data/table.css' %}">
+    {% endif %}  
 {% endblock %}
 {% block body %}
     <div class="container">
@@ -35,7 +39,7 @@
                 <table class="table table-dark table-hover">
                     <thead>
                         <tr>
-                            <td class="text-center rounded-top" colspan="100">10 Recent Solutions For {{solve.problem.problem_name}}</td>
+                            <td class="text-center rounded-top" colspan="100">Recent Solutions For {{solve.problem.problem_name}}</td>
                         </tr>
                         <tr>
                             <th scope="col">
@@ -53,7 +57,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for problem_solve in ProblemSolves %}
+                        {% for problem_solve in problem_solves %}
                         <tr data-href="{% url 'Data:solution' id=problem_solve.id %}">
                             <td scope="row" class="align-text-center">
                                 <img src="{{problem_solve.solvee.discordPFP}}" alt="Leetcode Logo" width="32" height="32" class="d-inline-block rounded-circle">
@@ -74,6 +78,31 @@
                         </tr>
                         {% endfor %}
                     </tbody>
+                    {% if pagination %}
+                    <tfoot>
+                        <tr>
+                            <td class="rounded-bottom" colspan="100">
+                                <div class="pagination d-flex justify-content-center">
+                                    <span class="step-links">
+                                        {% if problem_solves.has_previous %}
+                                            <a class="btn btn-outline-info" href="?page=1"><i class="fa-solid fa-angles-left"></i></a>
+                                            <a class="btn btn-outline-info" href="?page={{ problem_solves.previous_page_number }}"><i class="fa-solid fa-angle-left"></i></a>
+                                        {% endif %}
+                                
+                                        <span class="current">
+                                            Page {{ problem_solves.number }} of {{ problem_solves.paginator.num_pages }}.
+                                        </span>
+                                
+                                        {% if problem_solves.has_next %}
+                                            <a class="btn btn-outline-info" href="?page={{ problem_solves.next_page_number }}"><i class="fa-solid fa-angle-right"></i></a>
+                                            <a class="btn btn-outline-info" href="?page={{ problem_solves.paginator.num_pages }}"><i class="fa-solid fa-angles-right"></i></a>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    {% endif %}
                 </table>
             </div>
             {% else %}
