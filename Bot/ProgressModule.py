@@ -11,7 +11,7 @@ from leetcode_service.leetcode_client import LeetcodeClient
 class ProgressModule(commands.Cog):
 
     """
-        The data interface for Leetcord. Adds, removes, and modifies data and reflects it on the web-application: https://leetcode-discord.herokuapp.com/
+        The data interface for Leetcord. Adds, removes, and modifies data and reflects it on the web-application: https://leetcord.herokuapp.com/
     """
 
     def __init__(self, client):
@@ -45,8 +45,8 @@ class ProgressModule(commands.Cog):
                     
                 solved = self.client.dao.Solved(user, question)
 
-                embed = discord.Embed(colour=difficulty_color(question.difficulty),title="Solution Added!",url=f"https://leetcode-discord.herokuapp.com/solution/{solved.id}",description=f"Congratulations on solving Leetcode {standardize_difficulty(question.difficulty)} {question.problem_number} : {question.problem_name}.\nClick on the title to see your solution!\nDo `.takeaway {solved.id} \"YOUR TAKEAWAY\"` to add a takeaway.\nDo `.delete {solved.id}` to remove your solution.")
-                embed.set_author(name=user.discordName,url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+                embed = discord.Embed(colour=difficulty_color(question.difficulty),title="Solution Added!",url=f"https://leetcord.herokuapp.com/solution/{solved.id}",description=f"Congratulations on solving Leetcode {standardize_difficulty(question.difficulty)} {question.problem_number} : {question.problem_name}.\nClick on the title to see your solution!\nDo `.takeaway {solved.id} \"YOUR TAKEAWAY\"` to add a takeaway.\nDo `.delete {solved.id}` to remove your solution.")
+                embed.set_author(name=user.discordName,url=f"https://leetcord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
 
                 if question.premium:
                     embed.set_footer(text="This is a premium question.")
@@ -78,8 +78,8 @@ class ProgressModule(commands.Cog):
                     if solution.solvee == user:
                         solution = self.client.dao.UpdateTakeaway(solution, takeaway)
 
-                        embed = discord.Embed(colour=difficulty_color(solution.problem.difficulty),title="Takeaway Updated!",url=f"https://leetcode-discord.herokuapp.com/solution/{solution.id}",description=f"Takway updated successfully.\nClick on the title to see your solution!\nDo `.takeaway {solution.id} \"YOUR TAKEAWAY\"` to update this takeaway.\nDo `.delete {solution.id}` to remove your solution.")
-                        embed.set_author(name=user.discordName,url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+                        embed = discord.Embed(colour=difficulty_color(solution.problem.difficulty),title="Takeaway Updated!",url=f"https://leetcord.herokuapp.com/solution/{solution.id}",description=f"Takway updated successfully.\nClick on the title to see your solution!\nDo `.takeaway {solution.id} \"YOUR TAKEAWAY\"` to update this takeaway.\nDo `.delete {solution.id}` to remove your solution.")
+                        embed.set_author(name=user.discordName,url=f"https://leetcord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
                         
                         if solution.problem.premium:
                             embed.set_footer(text="This is a premium question.")
@@ -138,8 +138,8 @@ class ProgressModule(commands.Cog):
 
         async def display_stats(self, ctx, user):
             easy, medium, hard = self.client.dao.GetMemberStats(user)
-            embed = discord.Embed(colour=0xff9d5c,title="User Stats",url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",description=f"🟩`Easies Solved:` {easy}\n🟨`Mediums Solved:` {medium}\n🟥`Hards Solved:` {hard}\n#️⃣`Total Solved:` {easy+medium+hard}")
-            embed.set_author(name=f"{user.discordName}'s Stats",url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+            embed = discord.Embed(colour=0xff9d5c,title="User Stats",url=f"https://leetcord.herokuapp.com/member/{user.discordID}",description=f"🟩`Easies Solved:` {easy}\n🟨`Mediums Solved:` {medium}\n🟥`Hards Solved:` {hard}\n#️⃣`Total Solved:` {easy+medium+hard}")
+            embed.set_author(name=f"{user.discordName}'s Stats",url=f"https://leetcord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
             await ctx.reply(embed=embed)
 
         if discord_member:
@@ -166,7 +166,7 @@ class ProgressModule(commands.Cog):
 
         self.client.dao.MakeMember(new_member)
         embed = discord.Embed(colour=0xff9d5c,title="User Creation Successful!",description=f"Number of Solutions : {new_member.num_solutions}")
-        embed.set_author(name=new_member.discordName,url=f"https://leetcode-discord.herokuapp.com/member/{new_member.discordID}",icon_url=new_member.discordPFP)
+        embed.set_author(name=new_member.discordName,url=f"https://leetcord.herokuapp.com/member/{new_member.discordID}",icon_url=new_member.discordPFP)
         embed.set_footer(text=f"Verified on {new_member.date_verified}")
 
         await ctx.reply(embed=embed)
@@ -209,12 +209,51 @@ class ProgressModule(commands.Cog):
             user_id = ctx.message.author.id
         user = self.client.dao.GetMember(user_id)
         if user:
-            embed = discord.Embed(colour=0xff9d5c,description=f"Number of Solutions : {user.num_solutions}",url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}")
-            embed.set_author(name=user.discordName,url=f"https://leetcode-discord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+            embed = discord.Embed(colour=0xff9d5c,description=f"Number of Solutions : {user.num_solutions}",url=f"https://leetcord.herokuapp.com/member/{user.discordID}")
+            embed.set_author(name=user.discordName,url=f"https://leetcord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
             embed.set_footer(text=f"Verified on {user.date_verified}")
             await ctx.send(embed=embed)
         else:
             await ctx.reply("Unfortunately your account has not been verified yet")
+
+    @commands.command(
+        name="dailyquestion",
+        aliases=["daily", "questionoftoday", "today"],
+        brief="The question of the day.",
+        description="The question of the day."
+    )
+    async def dailyquestion(self, ctx):
+        question = LeetcodeClient.GetQuestionOfToday()
+        self.client.dao.MakeProblem(question)
+        embed = discord.Embed(
+            url=question._url(),
+            title=question.problem_name,
+            colour=difficulty_color(question.difficulty),
+            description=f"Today's daily question is {question.problem_number}. {question.problem_name}"
+        )
+        await ctx.send(embed=embed)
+
+    @commands.command(
+        name="random",
+        aliases=["r", "randomquestion"],
+        brief="A random question.",
+        description="Use `.random [easy/medium/hard] [premium]`."
+    )
+    async def random(self, ctx, difficulty=None, is_premium=None):
+        if is_premium:
+            is_premium = is_premium.lower()
+        is_premium = is_premium == "true" or is_premium == "premium"
+        
+        difficulty = standardize_difficulty(difficulty.title())
+        question = self.client.dao.GetRandomProblem(difficulty, is_premium)
+        print(question)
+        embed = discord.Embed(
+            url=question._url(),
+            title=question.problem_name,
+            colour=difficulty_color(question.difficulty),
+            description=f"Your random question is {question.problem_number}. {question.problem_name}"
+        )
+        await ctx.send(embed=embed)
 
     @commands.command(
         name="neetcode", 

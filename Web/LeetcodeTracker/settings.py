@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv("SECRET_KEY") or data['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not os.getenv("SECRET_KEY")
 
-ALLOWED_HOSTS = ['leetcode-discord.herokuapp.com','127.0.0.1','localhost']
+ALLOWED_HOSTS = ['leetcord.herokuapp.com','127.0.0.1','localhost']
 
 
 # Application definition

@@ -31,6 +31,24 @@ class Constants:
 
     PROBLEMSET_OPERATION = "problemsetQuestionList"
 
+    QUESTION_OF_TODAY_QUERY = """
+        query questionOfToday {
+            activeDailyCodingChallengeQuestion {
+                question {
+                    frontendQuestionId: questionFrontendId
+                    isPaidOnly
+                    title
+                    titleSlug
+                    difficulty
+                }
+            }
+        }    
+    """
+
+    QUESTION_OF_TODAY_OPERATION = "questionOfToday"
+
     PROBLEMS_PATH = "https://leetcode.com/problems"
 
     GRAPHQL_PATH = "https://leetcode.com/graphql"
+
+    REST_PATH = "https://leetcode.com/api/problems/all/"

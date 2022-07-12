@@ -51,6 +51,26 @@ class LeetcodeClient:
             raise RequestFailed(response.text)
 
     @staticmethod
+    def GetQuestionOfToday() -> Problem:
+        body = GraphqlQueryBuilder.BuildQuestionOfTodayQuery()
+        response = MakeGraphqlQuery(body)
+
+        if response.ok:
+            response = response.json()
+
+            if 'data' in response \
+                and 'activeDailyCodingChallengeQuestion' in response['data'] \
+                and 'question' in response['data']['activeDailyCodingChallengeQuestion']:
+
+                question = response['data']['activeDailyCodingChallengeQuestion']['question']
+                return LeetcodeClient._BuildProblem(question)
+            
+            else:
+                raise MalformedResponse()
+        else:
+            raise RequestFailed(response.text)
+
+    @staticmethod
     def _BuildProblem(response) -> Problem:
         problem = Problem()
 
