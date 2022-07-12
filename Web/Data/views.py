@@ -66,7 +66,7 @@ def problem(request, problem_number):
     else:
         problem = Problem.objects.filter(problem_number=problem_number).first()
         if problem:
-            problemSolves = problem.Solves.all().order_by("-date")
+            problemSolves = problem.Solves.all().order_by("date")
             paginator = Paginator(problemSolves,10)
             context = {
                 "problem" : problem,
