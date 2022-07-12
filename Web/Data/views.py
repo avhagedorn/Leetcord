@@ -44,6 +44,15 @@ def member(request, discord_id):
         }
     return render(request, "Data/member.html", context=context)
 
+def problemList(request):
+    problems = Problem.objects.all().order_by("-problem_number")
+    paginator = Paginator(problems,10)
+    context = {
+        "Problems" : paginator.get_page(request.GET.get('page')),
+        "pagination" : paginator.num_pages != 1
+    }
+    return render(request,"Data/problem_list.html",context=context)
+
 def postProblem(request):
     if request.POST and request.POST.get('LCNum'):
         return redirect('Data:problem',problem_number=request.POST.get('LCNum'))

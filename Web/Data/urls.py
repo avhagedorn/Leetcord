@@ -21,6 +21,7 @@ urlpatterns = [
     path('',views.index,name="index"),
     path('solution/<id>',views.solution,name="solution"),
     path('member/<discord_id>',views.member,name="member"),
+    path('problem_list',views.problemList,name="problemList"),
     path('problem',views.postProblem,name="postProblem"),
     path('problem/<problem_number>',views.problem,name="problem")
 ]

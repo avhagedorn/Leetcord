@@ -32,6 +32,7 @@
             {% endif %}
           </div>
           <div class="navbar-nav">
+            <a class="nav-link" href="{% url 'Data:problemList' %}"><i class="fa-solid fa-list-ol"></i> Problem List</a>
             <form class="d-flex" action="{% url 'Data:postProblem'%}" method="POST">
               {% csrf_token %}
               <input class="form-control me-2" type="number" placeholder="Enter Leetcode Number" aria-label="Search" name="LCNum" required>
