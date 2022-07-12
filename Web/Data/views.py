@@ -45,7 +45,7 @@ def member(request, discord_id):
     return render(request, "Data/member.html", context=context)
 
 def problemList(request):
-    problems = Problem.objects.all().order_by("-problem_number")
+    problems = Problem.objects.all().order_by("problem_number")
     paginator = Paginator(problems,10)
     context = {
         "Problems" : paginator.get_page(request.GET.get('page')),
@@ -66,7 +66,7 @@ def problem(request, problem_number):
     else:
         problem = Problem.objects.filter(problem_number=problem_number).first()
         if problem:
-            problemSolves = problem.Solves.all().order_by("date")
+            problemSolves = problem.Solves.all().order_by("-date")
             paginator = Paginator(problemSolves,10)
             context = {
                 "problem" : problem,
