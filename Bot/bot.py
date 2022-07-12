@@ -1,4 +1,5 @@
 from discord.ext import commands
+from LinkingModule import LinkingModule
 from db.dao import DAO
 from SetupModule import SetupModule
 from ProgressModule import ProgressModule
@@ -18,3 +19,4 @@ class LeetcodeBot(commands.Bot):
         
         self.add_cog(SetupModule(self))
         self.add_cog(ProgressModule(self))
+        self.add_cog(LinkingModule(self))
