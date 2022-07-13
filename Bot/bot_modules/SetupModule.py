@@ -13,5 +13,5 @@ class SetupModule(commands.Cog):
     async def on_ready(self):
         await self.client.wait_until_ready()
         print(f"{self.client.user} is online")
-        await self.client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching,name=f"{self.client.dao.GetMemberCount()} verified LeetCoders!"))
+        await self.client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching,name=f"{self.client.dao.GetMemberCount()} Verified LeetCoders!"))
     
