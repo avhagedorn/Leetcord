@@ -273,8 +273,24 @@ class ProgressModule(commands.Cog):
 
     @commands.command(
         name="update",
+        aliases=["updateself", "userupdate"],
         brief="Updates your information.",
         description="Updates your username and profile picture."
     )
     async def update(self, ctx):
-        pass
+        user = self.client.dao.GetMember(ctx.message.author.id)
+
+        if user:
+            member = ctx.author
+            user.discordName = member.name
+            user.discordPFP = str(member.avatar_url)
+            self.client.dao.MakeMember(user)
+
+            embed = discord.Embed(colour=0xff9d5c,title="User Update Successful!",)
+            embed.set_author(name=user.discordName,url=f"https://leetcord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
+            embed.set_footer(text=f"Verified on {user.date_verified}")
+
+            await ctx.reply(embed=embed)
+
+        else:
+            await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
