@@ -5,10 +5,10 @@ def MakeGraphqlQuery(body: str):
     return requests.post(url=Constants.GRAPHQL_PATH, json=body)
 
 def ParseSlugFromUrl(url: str):
-    PATH_LENGTH = len(Constants.PROBLEMS_PATH) + 1
+    parts = url.split('/')
+    try:
+        i = parts.index('problems') + 1
+        return parts[i]
+    except:
+        raise Exception("Invalid URL")
 
-    if len(url) > PATH_LENGTH:
-        url = url.rstrip('/')
-        return url[PATH_LENGTH:]
-    
-    raise Exception("Invalid URL")
