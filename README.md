@@ -22,7 +22,7 @@ Leetcord is an application that provides an integration between Discord and Leet
 
 ## Requirements <a id="REQUIREMENTS"></a>
 1. Python 3.8+
-> ⚠ Although we have solely tested on Python 3.8.13 higher versions should still be stable for this repository.
+> ⚠ Although we have solely tested on Python 3.8.13 higher versions should still be stable for this repository. Make sure to update `runtime.txt` accordingly.
 2. Install pip requirements: `pip install -r requirements.txt`
 3. Download [ODBC 17 Driver for Azure](https://www.microsoft.com/en-us/download/details.aspx?id=56567)
 > ⚠ This is only necessary if you decide to use Azure SQL for your database. Using a different SQL varient may affect setup.
@@ -117,29 +117,39 @@ heroku buildpacks:addhttps://github.com/matt-bertoncello/python-pyodbc-buildpack
 git push heroku main
 ```
 ## Commands <a id="COMMANDS"></a>
-> A more in depth list can be found on the website [here](https://leetcord.herokuapp.com/commands).
 * Solved: `.solved [Leetcode Number/Leetcode Slug/Leetcode URL]`
   > If the user is registered they can add a solution to the database. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such.
+  <img align="center" src="./Images/Solved.jpg">
 * Add Takeaway: `.takeaway [Solve ID] (Takeaway)`
   > If the user is registered and is associated with a solution they can add a takaway to their solution. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such.
+  <img align="center" src="./Images/Takeaway.jpg">
 * Delete Solution: `.delete [Solve ID]`
   > If the user is registered and is associated with a solution they can delete it.
+  <img align="center" src="./Images/Delete.jpg">
 * Get Stats: `.stats (Mention)`
   > Gets a member's stats. If no member is provided, the caller's stats will be displayed.
+  <img align="center" src="./Images/Stats.jpg">
 * Get Problem: `.problem [Leetcode Number/Leetcode Slug/Leetcode URL]`
   > If a problem is listed in the database it will fetch it and display the 5 recent solutions submitted for it.
+  <img align="center" src="./Images/Problem.jpg">
 * Get Recent: `.recent (Mention)`
   > Displays the most recent solutions sent to the database. If a user is provided the command will fetch the most recent solutions from that person.
+  <img align="center" src="./Images/Recent.jpg">
+  <img align="center" src="./Images/Recent_User.jpg">
 * Leeterboard: `.leeterboard`
   > Display's the top 5 users with most solved problems.
+  <img align="center" src="./Images/Leeterboard.jpg">
 * Get User Info: `.user (Mention)`
   > If a Member is given it will display their number of solutions as well as a link to their information. Otherwise it will display the invoker's information. If the user doesn't exist it will indicate as such.
+  <img align="center" src="./Images/User.jpg">
 * Update User Info: `.update`
   > Synchronizes your Discord Image and Discord Nickname with the database.
 * Daily Question: `.daily` 
   > Provides a link to LeetCode's daily question.
+  <img align="center" src="./Images/Daily.jpg">
 * Random Question: `.random (easy/medium/hard) (premium)`
   > This command by default provides a random choice from non-premium questions from LeetCode. If a difficulty is provided the search will be limited to that selection. If premium is passed as a parameter the search will be expanded to include premium problems.
+  <img align="center" src="./Images/Random.jpg">
 * NeetCode: `.neetcode`
   > Provides a link to Neetcode.
 * LeetCode: `.leetcode`
