@@ -170,6 +170,13 @@ class ProgressModule(commands.Cog):
         embed.set_footer(text=f"Verified on {new_member.date_verified}")
 
         await ctx.reply(embed=embed)
+
+    @commands.is_owner()
+    @commands.command(
+        name="aaa"
+    )
+    async def aaa(self, ctx):
+        await ctx.reply("hi")
     
     @commands.command(
         name="leeterboard",

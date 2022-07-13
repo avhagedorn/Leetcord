@@ -69,11 +69,10 @@ class LinkingModule(commands.Cog):
         
         difficulty = standardize_difficulty(difficulty.title())
         question = self.client.dao.GetRandomProblem(difficulty, is_premium)
-        print(question)
-        embed = discord.Embed(
-            url=question._url(),
-            title=question.problem_name,
-            colour=difficulty_color(question.difficulty),
-            description=f"Your random question is {question.problem_number}. {question.problem_name}"
-        )
-        await ctx.send(embed=embed)
+        # embed = discord.Embed(
+        #     url=question._url(),
+        #     title=question.problem_name,
+        #     colour=difficulty_color(question.difficulty),
+        #     description=f"Your random question is {question.problem_number}. {question.problem_name}"
+        # )
+        # await ctx.send(embed=embed)
