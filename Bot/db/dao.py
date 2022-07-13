@@ -110,14 +110,14 @@ class DAO:
         query = select(Solve)
         if problem:
             query = query.where(Solve.problem == problem)
-        query = query.order_by(Solve.id.desc()).limit(limit).options(subqueryload(Solve.problem), subqueryload(Solve.solvee))
+        query = query.order_by(Solve.date.desc()).limit(limit).options(subqueryload(Solve.problem), subqueryload(Solve.solvee))
         return self._session.execute(query).scalars().all()
 
     def RecentUserSolutions(self, solvee: Member = None, limit: int = 5) -> List[Solve]:
         query = select(Solve)
         if solvee:
             query = query.where(Solve.solvee == solvee)
-        query = query.order_by(Solve.id.desc()).limit(limit)
+        query = query.order_by(Solve.date.desc()).limit(limit)
         return self._session.execute(query).scalars().all()
 
     def GetRandomProblem(self, difficulty_filter, includes_premium) -> Problem:

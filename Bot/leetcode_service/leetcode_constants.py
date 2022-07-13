@@ -52,3 +52,8 @@ class Constants:
     GRAPHQL_PATH = "https://leetcode.com/graphql"
 
     REST_PATH = "https://leetcode.com/api/problems/all/"
+
+
+    class Leetcord:
+
+        SOLUTION_PATH = "https://leetcord.herokapp.com/solution"

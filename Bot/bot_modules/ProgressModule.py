@@ -188,8 +188,14 @@ class ProgressModule(commands.Cog):
 
             for solution in solutions:
                 print(solution.problem)
-        
+
         else:
+            try:
+                question = LeetcodeClient.GetQuestionFromSearch(problem_query)
+                self.client.dao.MakeProblem(question)
+            except Exception as e:
+                print(e)
+                await ctx.reply("An unexpected error occurred. If this issue persists, contact Alan or Kanishk.")
             await ctx.reply("Problem does not exist.")
 
     @commands.command(
@@ -248,7 +254,7 @@ class ProgressModule(commands.Cog):
 
     @commands.command(
         name="user",
-        brief="Displays a user's information",
+        brief="Displays a user's information.",
         description="Use `.user [Member]`. If a Member is given it will display their number of solutions as well as a link to their information. Otherwise it will display the invoker's information. If the user doesn't exist it will indicate as such."
     )
     async def user(self, ctx, member: discord.User = None):
@@ -264,3 +270,11 @@ class ProgressModule(commands.Cog):
             await ctx.send(embed=embed)
         else:
             await ctx.reply("Unfortunately your account has not been verified yet")
+
+    @commands.command(
+        name="update",
+        brief="Updates your information.",
+        description="Updates your username and profile picture."
+    )
+    async def update(self, ctx):
+        pass
