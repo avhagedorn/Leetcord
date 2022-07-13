@@ -173,6 +173,7 @@ class ProgressModule(commands.Cog):
 
     @commands.command(
         name="problem",
+        aliases=["p"],
         brief="Recent problem solutions.",
         description="Use `.recent [problem id/slug/url]`."
     )
@@ -184,11 +185,21 @@ class ProgressModule(commands.Cog):
 
         if question:
             solutions = self.client.dao.RecentProblemSolutions(question)
-            print(solutions)
 
+            embed = discord.Embed(
+                colour=difficulty_color(question.difficulty),
+                title=f"Recent Solutions for LC {question.problem_number} : {question.problem_name}",
+                description=f"Difficulty: `{standardize_difficulty(question.difficulty)}`",
+            )
             for solution in solutions:
-                print(solution.problem)
-
+                embed.add_field(
+                    name=f"{solution.solvee.discordName}'s solution",
+                    value=f"Solved On: `{solution.date}`\nTakeaway: {'✅' if solution.takeaway else '❌'}\nLink: {solution._url()}",
+                    inline=False
+                )
+            if question.premium:
+                embed.set_footer(text="This is a premium question.")
+            await ctx.reply(embed=embed)
         else:
             try:
                 question = LeetcodeClient.GetQuestionFromSearch(problem_query)
@@ -210,7 +221,6 @@ class ProgressModule(commands.Cog):
             recent_user = self.client.dao.GetMember(member.id)
     
         solutions = self.client.dao.RecentUserSolutions(recent_user)
-        print(solutions)
 
         embed = discord.Embed(
             colour=0xff9d5c,
@@ -220,7 +230,7 @@ class ProgressModule(commands.Cog):
 
         for solution in solutions:
             embed.add_field(
-                name=f"{solution.solvee.discordName}'s Solution for LC {solution.problem.problem_number} {solution.problem.problem_name}",
+                name=f"{solution.solvee.discordName}'s Solution for LC: {solution.problem.problem_number} {solution.problem.problem_name}",
                 value=f"Difficulty: `{standardize_difficulty(solution.problem.difficulty)}`\nPremium?: `{solution.problem.premium}`\nDate Solved: `{solution.date}`\nTakeaway: {'✅' if solution.takeaway else '❌'}\nLink: {solution._url()}",
                 inline=False
             )
