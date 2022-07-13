@@ -1,6 +1,6 @@
-<h1><img src="https://raw.githubusercontent.com/avhagedorn/LeetcodeTracker/main/Web/STATIC/Leetcord.webp?token=GHSAT0AAAAAABWDDNGE3OYGF7C6QVGWX73MYWOBNQQ" style="max-width:48px">Leetcord</h1>
+<h1><img src="./Web/STATIC/Leetcord.webp" style="max-width:48px">Leetcord</h1>
 <p align="center">
-    <img src="https://raw.githubusercontent.com/avhagedorn/LeetcodeTracker/main/Web/STATIC/General/Integration.webp?token=GHSAT0AAAAAABWDDNGEWDBF4K6NLUGGQOU2YWOEFPA" style="max-width:384px">
+    <img src="./Web/STATIC/General/Integration.webp" style="max-width:384px">
 <p>
 Leetcord is an application that provides an integration between Discord and LeetCode to create a fun and interactive platform for users to share, compare, or store solutions with their friends. The application is designed to store short takeaways such that individuals can learn from one another.
 
