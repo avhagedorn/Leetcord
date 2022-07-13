@@ -70,6 +70,9 @@ class DAO:
         query = select(Member).where(Member.discordID == discordID)
         return self._FindFirst(query)
 
+    def GetMemberCount(self) -> int:
+        return self._session.query(Member).count()
+
     def GetMemberStats(self, member: Member):
         joins = self._session.query(Solve).join(Solve.problem).where(Solve.solvee == member)
         retVal = [0, 0, 0]
