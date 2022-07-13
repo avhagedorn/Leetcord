@@ -56,4 +56,4 @@ class Constants:
 
     class Leetcord:
 
-        SOLUTION_PATH = "https://leetcord.herokapp.com/solution"
+        SOLUTION_PATH = "https://leetcord.herokuapp.com/solution"
