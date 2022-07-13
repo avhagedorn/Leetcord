@@ -1,6 +1,6 @@
+import random
 from typing import List
 from sqlalchemy import create_engine, select
-from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import sessionmaker, subqueryload
 from datetime import datetime
 from leetcode_service.leetcode_util import ParseSlugFromUrl
@@ -120,13 +120,17 @@ class DAO:
         query = query.order_by(Solve.date.desc()).limit(limit).options(subqueryload(Solve.problem))
         return self._session.execute(query).scalars().all()
 
-    def GetRandomProblem(self, difficulty_filter, includes_premium) -> Problem:
-        # query = select(Problem).where(Problem.premium == includes_premium)
-        # if difficulty_filter is not None:
-        #     query = query.where(Problem.difficulty == difficulty_filter)
-        query = self._session.query(Problem).order_by(func.random()).all()
-        print([str(t) for t in query])
-        return query #.first() # self._FindFirst(query)
+    def GetRandomProblem(self, difficulty_filter = None, premium_filter = None) -> Problem:
+        query = self._session.query(Problem)
+
+        if premium_filter is False:
+            query = query.where(Problem.premium == premium_filter)
+        
+        if difficulty_filter is not None:
+            query = query.where(Problem.difficulty == difficulty_filter)
+        
+        row_count = query.count()
+        return query.order_by(Problem.id).limit(1).offset(random.randint(0, row_count-1)).first()
 
     def _GetProblemByNumber(self, number: int):
         query = select(Problem).where(Problem.problem_number == number)

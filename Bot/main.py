@@ -18,5 +18,4 @@ IS_TEST = os.getenv('DISCORD_TOKEN') == None
 lcb = LeetcodeBot()
 lcb.help_command = LeetcordHelpCommand()
 
-if IS_TEST:
-    lcb.run(TOKEN)
+lcb.run(TOKEN)

@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from db.db_constants import Constants
 from embed_util import difficulty_color
 from db.db_utils import standardize_difficulty
 
@@ -72,17 +73,26 @@ class LinkingModule(commands.Cog):
         brief="A random question.",
         description="Use `.random [easy/medium/hard] [premium]`."
     )
-    async def random(self, ctx, difficulty=None, is_premium=None):
-        if is_premium:
-            is_premium = is_premium.lower()
-        is_premium = is_premium == "true" or is_premium == "premium"
-        
-        difficulty = standardize_difficulty(difficulty.title())
+    async def random(self, ctx, raw_difficulty='', raw_premium=''):
+        is_premium = False
+        difficulty = None
+
+        raw_premium = raw_premium.lower()
+        is_premium = True if raw_difficulty == "premium" else raw_premium
+        is_premium = is_premium or raw_premium == "premium"    
+        difficulty = standardize_difficulty(raw_difficulty.title()) if raw_difficulty.title() in Constants.DIFFICULTY_MAPPING.values() else None
+
         question = self.client.dao.GetRandomProblem(difficulty, is_premium)
-        # embed = discord.Embed(
-        #     url=question._url(),
-        #     title=question.problem_name,
-        #     colour=difficulty_color(question.difficulty),
-        #     description=f"Your random question is {question.problem_number}. {question.problem_name}"
-        # )
-        # await ctx.send(embed=embed)
+
+        embed = discord.Embed(
+            url=question._url(),
+            title=question.problem_name,
+            colour=difficulty_color(question.difficulty),
+            description=f"Your random question is {question.problem_number}. {question.problem_name}"
+        )
+
+        if question.premium:
+            embed.set_footer(text="This is a premium question.")
+
+        await ctx.reply(embed=embed)
+
