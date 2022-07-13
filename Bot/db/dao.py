@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy import create_engine, select
 from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import sessionmaker
@@ -104,6 +105,13 @@ class DAO:
         else:
             # Query based on title
             return self._GetProblemByTitle(search)
+
+    def RecentProblemSolutions(self, problem: Problem = None, limit: int = 5) -> List[Solve]:
+        query = select(Solve)
+        if problem:
+            query = query.where(Solve.problem == problem)
+        query = query.order_by(Solve.id.desc()).limit(limit)
+        return self._session.execute(query).scalars().all()
 
     def GetRandomProblem(self, difficulty_filter, includes_premium) -> Problem:
         # query = select(Problem).where(Problem.premium == includes_premium)
