@@ -1,4 +1,5 @@
-from sqlalchemy import create_engine, delete, func, select
+from sqlalchemy import create_engine, select
+from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from leetcode_service.leetcode_util import ParseSlugFromUrl
@@ -108,9 +109,9 @@ class DAO:
         # query = select(Problem).where(Problem.premium == includes_premium)
         # if difficulty_filter is not None:
         #     query = query.where(Problem.difficulty == difficulty_filter)
-        query = self._session.query(Problem).order_by(func.rand()).all()
+        query = self._session.query(Problem).order_by(func.random()).all()
         print([str(t) for t in query])
-        return query.first() # self._FindFirst(query)
+        return query #.first() # self._FindFirst(query)
 
     def _GetProblemByNumber(self, number: int):
         query = select(Problem).where(Problem.problem_number == number)
