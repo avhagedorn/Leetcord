@@ -183,39 +183,26 @@ class ProgressModule(commands.Cog):
         if user:
 
             n_args = len(args)
+            problem_query = f"{' '.join(args)}"
 
-            if n_args:
-                problem_query = f"{' '.join(args)}"
+            question = self.client.dao.GetProblem(problem_query, n_args)            
+            solutions = self.client.dao.RecentProblemSolutions(question)
+            print(solutions)
 
-                question = self.client.dao.GetProblem(problem_query, n_args)
+            # embed = discord.Embed(
+            #     colour=0xff9d5c,
+            #     title="Recent solutions",
+            #     description="",
+            # )
+            # for i in range(len(solutions)):
+            #     embed.add_field(
+            #         name=f"",
+            #         value=f"",
+            #         inline=False
+            #     )
 
-                if not question:
-                    try:
-                        question = LeetcodeClient.GetQuestionFromSearch(problem_query)
-                        self.client.dao.MakeProblem(question)
-                    except Exception as e:
-                        print(e)
-                        await ctx.reply("An unexpected error occurred. If this issue persists, contact Alan or Kanishk.")
-                
-                solutions = self.client.dao.RecentProblemSolutions(question)
-                print(solutions)
+            # await ctx.reply(embed=embed)
 
-                embed = discord.Embed(
-                    colour=0xff9d5c,
-                    title="Recent solutions",
-                    description="",
-                )
-                for i in range(len(solutions)):
-                    embed.add_field(
-                        name=f"",
-                        value=f"",
-                        inline=False
-                    )
-
-                await ctx.reply(embed=embed)
-
-            else:
-                await ctx.reply("No information was provided, couldn't indentify a leetcode question.")
         else:
             await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
     
