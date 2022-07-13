@@ -177,26 +177,20 @@ class ProgressModule(commands.Cog):
         description="Use `.recent [problem id/slug/url]`."
     )
     async def problem(self, ctx, *args):
-        user = self.client.dao.GetMember(ctx.message.author.id)
+        n_args = len(args)
+        problem_query = f"{' '.join(args)}"
 
-        if user:
+        question = self.client.dao.GetProblem(problem_query, n_args)
 
-            n_args = len(args)
-            problem_query = f"{' '.join(args)}"
+        if question:
+            solutions = self.client.dao.RecentProblemSolutions(question)
+            print(solutions)
 
-            question = self.client.dao.GetProblem(problem_query, n_args)
-
-            if question:
-                solutions = self.client.dao.RecentProblemSolutions(question)
-                print(solutions)
-
-                for solution in solutions:
-                    print(solution.problem)
-            
-            else:
-                await ctx.reply("Problem does not exist.")
+            for solution in solutions:
+                print(solution.problem)
+        
         else:
-            await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
+            await ctx.reply("Problem does not exist.")
 
     @commands.command(
         name="recent",
@@ -204,22 +198,17 @@ class ProgressModule(commands.Cog):
         description="Use `.recent [problem id/slug/url]`."
     )
     async def recent(self, ctx, member: discord.User = None):
-        user = self.client.dao.GetMember(ctx.message.author.id)
+        recent_user = None
 
-        if user:
-            
-            recent_user = None
+        if member:
+            recent_user = self.client.dao.GetMember(member.id)
+    
+        solutions = self.client.dao.RecentUserSolutions(recent_user)
+        print(solutions)
 
-            if member:
-                recent_user = self.client.dao.GetMember(member.id)
-       
-            solutions = self.client.dao.RecentUserSolutions(recent_user)
-            print(solutions)
+        for solution in solutions:
+            print(solution.problem)
 
-            for solution in solutions:
-                print(solution.problem)
-        else:
-            await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
     
     @commands.command(
         name="leeterboard",
