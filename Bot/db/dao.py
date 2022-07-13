@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy import create_engine, select
 from sqlalchemy.sql.expression import func
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, subqueryload
 from datetime import datetime
 from leetcode_service.leetcode_util import ParseSlugFromUrl
 from db.models import Problem, Solve
@@ -110,7 +110,7 @@ class DAO:
         query = select(Solve)
         if problem:
             query = query.where(Solve.problem == problem)
-        query = query.order_by(Solve.id.desc()).limit(limit)
+        query = query.order_by(Solve.id.desc()).limit(limit).options(subqueryload(Solve.problem), subqueryload(Solve.solvee))
         return self._session.execute(query).scalars().all()
 
     def RecentUserSolutions(self, solvee: Member = None, limit: int = 5) -> List[Solve]:
