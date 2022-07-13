@@ -172,12 +172,11 @@ class ProgressModule(commands.Cog):
         await ctx.reply(embed=embed)
 
     @commands.command(
-        name="recent",
-        aliases=["recentsolutions"],
+        name="problem",
         brief="Recent problem solutions.",
         description="Use `.recent [problem id/slug/url]`."
     )
-    async def recent(self, ctx, *args):
+    async def problem(self, ctx, *args):
         user = self.client.dao.GetMember(ctx.message.author.id)
 
         if user:
@@ -186,23 +185,35 @@ class ProgressModule(commands.Cog):
             problem_query = f"{' '.join(args)}"
 
             question = self.client.dao.GetProblem(problem_query, n_args)            
-            solutions = self.client.dao.RecentUserSolutions(question)
+            solutions = self.client.dao.RecentProblemSolutions(question)
             print(solutions)
 
-            # embed = discord.Embed(
-            #     colour=0xff9d5c,
-            #     title="Recent solutions",
-            #     description="",
-            # )
-            # for i in range(len(solutions)):
-            #     embed.add_field(
-            #         name=f"",
-            #         value=f"",
-            #         inline=False
-            #     )
+            for solution in solutions:
+                print(solution.problem)
+        else:
+            await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
 
-            # await ctx.reply(embed=embed)
+    @commands.command(
+        name="recent",
+        brief="Recent problem solutions.",
+        description="Use `.recent [problem id/slug/url]`."
+    )
+    async def recent(self, ctx, member: discord.User = None):
+        user = self.client.dao.GetMember(ctx.message.author.id)
 
+        if user:
+
+            if member:
+                user_id = member.id
+            else:
+                user_id = ctx.message.author.id
+            query_user = self.client.dao.GetMember(user_id)
+       
+            solutions = self.client.dao.RecentUserSolutions(query_user)
+            print(solutions)
+
+            for solution in solutions:
+                print(solution.problem)
         else:
             await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
     
