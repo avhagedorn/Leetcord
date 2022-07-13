@@ -212,9 +212,19 @@ class ProgressModule(commands.Cog):
         solutions = self.client.dao.RecentUserSolutions(recent_user)
         print(solutions)
 
-        for solution in solutions:
-            print(solution.problem)
+        embed = discord.Embed(
+            colour=0xff9d5c,
+            title=f"Recent Solutions for {recent_user.discordName}" if recent_user else "Recent Solutions",
+            description="",
+        )
 
+        for solution in solutions:
+            embed.add_field(
+                name=f"{solution.solvee.discordName}'s Solution for LC {solution.problem.problem_number} {solution.problem.problem_name}",
+                value=f"Difficulty: `{standardize_difficulty(solution.problem.difficulty)}`\nPremium?: `{solution.problem.premium}`\nDate Solved: `{solution.date}`\nTakeaway: {'✅' if solution.takeaway else '❌'}\nLink: {solution._url()}",
+                inline=False
+            )
+        await ctx.reply(embed=embed)
     
     @commands.command(
         name="leeterboard",
