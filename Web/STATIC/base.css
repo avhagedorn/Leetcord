@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&subset=devanagari,latin-ext');
+/* General font and background colors */
 body{
 	background: linear-gradient(-45deg, #ff781f,#ff8b3d, #ff9d5c,#ffaf7a);
 	background-size: 400% 400%;
@@ -7,6 +8,7 @@ body{
     margin: 0;
 	font-family: 'Poppins', sans-serif;
 }
+/* Breathing Background */
 @keyframes gradient {
 	0% {
 		background-position: 0% 50%;
@@ -18,6 +20,7 @@ body{
 		background-position: 0% 50%;
 	}
 }
+/* Navbar */
 .navbar-dark {
 	background-color: #14151a;
 }
@@ -41,7 +44,7 @@ body{
 	}
 }
 
-/* Constants */
+/* Difficulty Font Colors */
 .diff-0 {
 	color: #00b8a3;
 }
@@ -52,6 +55,7 @@ body{
 	color: #ff375f;
 }
 
+/* Bootstrap Modals are by default light, dark background and white text them */
 .modal-dark {
 	color: white;
 	background-color: var(--bs-dark);
@@ -63,6 +67,7 @@ body{
 	border-top: 0px;
 }
 
+/* The arrow in the navbar when in mobile or tablet view. */
 .fa-circle-chevron-down{
 	transition: all 500ms;
 }
@@ -71,6 +76,7 @@ body{
 	transform: rotate(90deg);
 }
 
+/* Command text formatting to distinguish it from the surrounding text. */
 .command{
 	font-family: 'Ubuntu Mono', monospace;
 	background-color: black;

@@ -3,14 +3,14 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_delete
 
 # Create your models here.
-def update_children(member):
-    return member.verified_by.verified_by
 class Member(models.Model):
     discordID = models.BigIntegerField(unique=True)
     discordName = models.CharField(max_length=35)
     discordPFP = models.URLField()
     date_verified = models.DateField(auto_now_add=True)
     num_solutions = models.SmallIntegerField(default=0)
+    # Store num solutions in order to speed up leeterboard command.
+    # Instead of searching solution and counting it, individually we can store the num completed here.
 
     def __str__(self) -> str:
         return f"Member {self.discordName} verified on {self.date_verified}"

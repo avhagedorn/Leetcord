@@ -24,8 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if os.path.exists(os.path.join(BASE_DIR,"config.json")):
-    f = open(os.path.join(BASE_DIR,"config.json"))
+if os.path.exists(os.path.join(BASE_DIR,"..","config.json")):
+    f = open(os.path.join(BASE_DIR,"..","config.json"))
     data = json.load(f)
     f.close()
 
@@ -34,6 +34,8 @@ SECRET_KEY = os.getenv("SECRET_KEY") or data['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not os.getenv("SECRET_KEY")
 
+
+# Replace this Allowed Host to your URL
 ALLOWED_HOSTS = ['leetcord.herokuapp.com','127.0.0.1','localhost']
 
 
@@ -82,22 +84,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'LeetcodeTracker.wsgi.application'
 
 
-# Database
+# Database (USES Azure SQL)
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 if os.getenv("SECRET_KEY"):
+    # Running on server connect to database.
     DATABASES = {
-    "default": {
-        "ENGINE": "mssql",
-        "NAME": os.getenv("DBNAME") or data["DBNAME"],
-        "USER": os.getenv("DBUSER") or data["DBUSER"],
-        "PASSWORD": os.getenv("DBPASS") or data["DBPASS"],
-        "HOST": os.getenv("DBHOST") or data["DBHOST"],
-        "PORT": "1433",
-        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", },
+        "default": {
+            "ENGINE": "mssql",
+            "NAME": os.getenv("DBNAME") or data["DBNAME"],
+            "USER": os.getenv("DBUSER") or data["DBUSER"],
+            "PASSWORD": os.getenv("DBPASS") or data["DBPASS"],
+            "HOST": os.getenv("DBHOST") or data["DBHOST"],
+            "PORT": "1433",
+            "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", },
         },
     }
 else:
+    # If running local use an SQL Lite.
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
