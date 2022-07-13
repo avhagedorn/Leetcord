@@ -182,24 +182,10 @@ class ProgressModule(commands.Cog):
         problem_query = f"{' '.join(args)}"
 
         question = self.client.dao.GetProblem(problem_query, n_args)
+        solutions = []
 
         if question:
             solutions = self.client.dao.RecentProblemSolutions(question)
-
-            embed = discord.Embed(
-                colour=difficulty_color(question.difficulty),
-                title=f"Recent Solutions for LC {question.problem_number} : {question.problem_name}",
-                description=f"Difficulty: `{standardize_difficulty(question.difficulty)}`",
-            )
-            for solution in solutions:
-                embed.add_field(
-                    name=f"{solution.solvee.discordName}'s solution",
-                    value=f"Solved On: `{solution.date}`\nTakeaway: {'✅' if solution.takeaway else '❌'}\nLink: {solution._url()}",
-                    inline=False
-                )
-            if question.premium:
-                embed.set_footer(text="This is a premium question.")
-            await ctx.reply(embed=embed)
         else:
             try:
                 question = LeetcodeClient.GetQuestionFromSearch(problem_query)
@@ -207,7 +193,21 @@ class ProgressModule(commands.Cog):
             except Exception as e:
                 print(e)
                 await ctx.reply("An unexpected error occurred. If this issue persists, contact Alan or Kanishk.")
-            await ctx.reply("Problem does not exist.")
+
+        embed = discord.Embed(
+            colour=difficulty_color(question.difficulty),
+            title=f"Recent Solutions for LC {question.problem_number} : {question.problem_name}",
+            description=f"Difficulty: `{standardize_difficulty(question.difficulty)}`",
+        )
+        for solution in solutions:
+            embed.add_field(
+                name=f"{solution.solvee.discordName}'s solution",
+                value=f"Solved On: `{solution.date}`\nTakeaway: {'✅' if solution.takeaway else '❌'}\nLink: {solution._url()}",
+                inline=False
+            )
+        if question.premium:
+            embed.set_footer(text="This is a premium question.")
+        await ctx.reply(embed=embed)
 
     @commands.command(
         name="recent",
