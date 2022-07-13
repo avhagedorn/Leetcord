@@ -79,18 +79,18 @@
                             <td class="rounded-bottom" colspan="100">
                                 <div class="pagination d-flex justify-content-center">
                                     <span class="step-links">
-                                        {% if solves_page.has_previous %}
+                                        {% if userSolves.has_previous %}
                                             <a class="btn btn-outline-info" href="?page=1"><i class="fa-solid fa-angles-left"></i></a>
-                                            <a class="btn btn-outline-info" href="?page={{ solves_page.previous_page_number }}"><i class="fa-solid fa-angle-left"></i></a>
+                                            <a class="btn btn-outline-info" href="?page={{ userSolves.previous_page_number }}"><i class="fa-solid fa-angle-left"></i></a>
                                         {% endif %}
                                 
                                         <span class="current">
-                                            Page {{ solves_page.number }} of {{ solves_page.paginator.num_pages }}.
+                                            Page {{ userSolves.number }} of {{ userSolves.paginator.num_pages }}.
                                         </span>
                                 
-                                        {% if solves_page.has_next %}
-                                            <a class="btn btn-outline-info" href="?page={{ solves_page.next_page_number }}"><i class="fa-solid fa-angle-right"></i></a>
-                                            <a class="btn btn-outline-info" href="?page={{ solves_page.paginator.num_pages }}"><i class="fa-solid fa-angles-right"></i></a>
+                                        {% if userSolves.has_next %}
+                                            <a class="btn btn-outline-info" href="?page={{ userSolves.next_page_number }}"><i class="fa-solid fa-angle-right"></i></a>
+                                            <a class="btn btn-outline-info" href="?page={{ userSolves.paginator.num_pages }}"><i class="fa-solid fa-angles-right"></i></a>
                                         {% endif %}
                                     </span>
                                 </div>
