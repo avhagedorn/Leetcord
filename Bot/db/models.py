@@ -54,5 +54,8 @@ class Solve(Base):
     problem_id = Column(Integer, ForeignKey('data_problem.id', ondelete='CASCADE'))
     problem = relationship('Problem', back_populates='solutions')
 
+    def _url(self) -> str:
+        return f"{Constants.Leetcord.SOLUTION_PATH}/{self.id}"
+
     def __str__(self) -> str:
         return f"{self.solvee.discordName}'s solution to {self.problem} on {self.date}"
