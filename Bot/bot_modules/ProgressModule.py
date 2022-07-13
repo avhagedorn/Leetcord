@@ -152,6 +152,7 @@ class ProgressModule(commands.Cog):
     @commands.is_owner()
     @commands.command(
         name="makemember",
+        aliases=["verify"],
         brief="Creates a member in the database.",
         description="Use `.member <Member>` in order to create a new member in the database.",
         hidden=True
@@ -174,8 +175,8 @@ class ProgressModule(commands.Cog):
     @commands.command(
         name="problem",
         aliases=["p"],
-        brief="Recent problem solutions.",
-        description="Use `.recent [problem id/slug/url]`."
+        brief="Fetches problem information.",
+        description="If a problem is listed in the database it will fetch it and display the 5 recent solutions submitted for it."
     )
     async def problem(self, ctx, *args):
         n_args = len(args)
@@ -211,8 +212,8 @@ class ProgressModule(commands.Cog):
 
     @commands.command(
         name="recent",
-        brief="Recent problem solutions.",
-        description="Use `.recent [problem id/slug/url]`."
+        brief="Fetches the most recent solutions posted.",
+        description="Displays the 5 most recently submitted solutions to the database, if a user is passed as a parameter said user's recent solutions will be displayed."
     )
     async def recent(self, ctx, member: discord.User = None):
         recent_user = None
@@ -285,7 +286,7 @@ class ProgressModule(commands.Cog):
         name="update",
         aliases=["updateself", "userupdate"],
         brief="Updates your information.",
-        description="Updates your username and profile picture."
+        description="Use `.update`.Synchronizes your Discord Image and Discord Nickname with the database."
     )
     async def update(self, ctx):
         user = self.client.dao.GetMember(ctx.message.author.id)

@@ -70,7 +70,7 @@ class LinkingModule(commands.Cog):
         name="random",
         aliases=["r", "randomquestion"],
         brief="A random question.",
-        description="Use `.random [easy/medium/hard] [premium]`."
+        description="Use `.random (easy/medium/hard) (premium)`. This command by default provides a random choice from non-premium questions from LeetCode. If a difficulty is provided the search will be limited to that selection. If premium is passed as a parameter the search will be expanded to include premium problems."
     )
     async def random(self, ctx, raw_difficulty='', raw_premium=''):
         is_premium = False
