@@ -184,12 +184,17 @@ class ProgressModule(commands.Cog):
             n_args = len(args)
             problem_query = f"{' '.join(args)}"
 
-            question = self.client.dao.GetProblem(problem_query, n_args)            
-            solutions = self.client.dao.RecentProblemSolutions(question)
-            print(solutions)
+            question = self.client.dao.GetProblem(problem_query, n_args)
 
-            for solution in solutions:
-                print(solution.problem)
+            if question:
+                solutions = self.client.dao.RecentProblemSolutions(question)
+                print(solutions)
+
+                for solution in solutions:
+                    print(solution.problem)
+            
+            else:
+                await ctx.reply("Problem does not exist.")
         else:
             await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
 
@@ -202,14 +207,13 @@ class ProgressModule(commands.Cog):
         user = self.client.dao.GetMember(ctx.message.author.id)
 
         if user:
+            
+            recent_user = None
 
             if member:
-                user_id = member.id
-            else:
-                user_id = ctx.message.author.id
-            query_user = self.client.dao.GetMember(user_id)
+                recent_user = self.client.dao.GetMember(member.id)
        
-            solutions = self.client.dao.RecentUserSolutions(query_user)
+            solutions = self.client.dao.RecentUserSolutions(recent_user)
             print(solutions)
 
             for solution in solutions:
