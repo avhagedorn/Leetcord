@@ -188,8 +188,14 @@ class ProgressModule(commands.Cog):
 
             for solution in solutions:
                 print(solution.problem)
-        
+
         else:
+            try:
+                question = LeetcodeClient.GetQuestionFromSearch(problem_query)
+                self.client.dao.MakeProblem(question)
+            except Exception as e:
+                print(e)
+                await ctx.reply("An unexpected error occurred. If this issue persists, contact Alan or Kanishk.")
             await ctx.reply("Problem does not exist.")
 
     @commands.command(
