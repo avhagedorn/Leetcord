@@ -186,7 +186,7 @@ class ProgressModule(commands.Cog):
             problem_query = f"{' '.join(args)}"
 
             question = self.client.dao.GetProblem(problem_query, n_args)            
-            solutions = self.client.dao.RecentProblemSolutions(question)
+            solutions = self.client.dao.RecentUserSolutions(question)
             print(solutions)
 
             # embed = discord.Embed(
