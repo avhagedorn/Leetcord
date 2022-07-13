@@ -1,6 +1,6 @@
-<h1><img src="./Web/STATIC/Leetcord.webp" width="48px">Leetcord</h1>
+<h1><img src="./Web/STATIC/Leetcord.webp" width="48">Leetcord</h1>
 <p align="center">
-    <img src="./Web/STATIC/General/Integration.webp" width="384px">
+    <img src="./Web/STATIC/General/Integration.webp" width="384">
 <p>
 Leetcord is an application that provides an integration between Discord and LeetCode to create a fun and interactive platform for users to share, compare, or store solutions with their friends. The application is designed to store short takeaways such that individuals can learn from one another.
 
