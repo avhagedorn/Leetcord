@@ -159,7 +159,7 @@ class ProgressModule(commands.Cog):
     async def makemember(self, ctx, member: discord.User):
         new_member = Member()
         new_member.discordID = member.id
-        new_member.discordName = member.nick
+        new_member.discordName = member.nick or member.name
         new_member.discordPFP = str(member.avatar_url)
         new_member.date_verified = datetime.now()
         new_member.num_solutions = 0
@@ -292,7 +292,7 @@ class ProgressModule(commands.Cog):
 
         if user:
             member = ctx.author
-            user.discordName = member.nick
+            user.discordName = member.nick or member.name
             user.discordPFP = str(member.avatar_url)
             self.client.dao.MakeMember(user)
 
