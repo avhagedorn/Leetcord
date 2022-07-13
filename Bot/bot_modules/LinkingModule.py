@@ -36,6 +36,16 @@ class LinkingModule(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(
+        name="about", 
+        brief="About Leetcord.",
+        description="A tracking solution for leetcode."
+    )
+    async def about(self, ctx):
+        embed = discord.Embed(colour=0xff9d5c,title="About",description="Your one-stop-shop for coding problems.",url="https://leetcord.herokuapp.com/about")
+        embed.set_thumbnail(url=self.client.user.avatar_url)
+        await ctx.send(embed=embed)
+
+    @commands.command(
         name="dailyquestion",
         aliases=["daily", "questionoftoday", "today","dq"],
         brief="The question of the day.",
