@@ -3,8 +3,8 @@ import json
 from bot import LeetcodeBot
 from HelpCommand import LeetcordHelpCommand
 
-if os.path.exists(os.path.join(os.path.dirname(__file__),"config.json")):
-    f = open(os.path.join(os.path.dirname(__file__),"config.json"))
+if os.path.exists(os.path.join(os.path.dirname(__file__),"..","config.json")):
+    f = open(os.path.join(os.path.dirname(__file__),"..","config.json"))
     data = json.load(f)
     f.close()
 
