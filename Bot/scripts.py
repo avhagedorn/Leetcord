@@ -9,7 +9,7 @@ def populate_leetcode_questions():
     unsynced_questions = []
     
     print("Verifying all problem entries are up to date with leetcode.com...")
-    for i in range(2300, num_questions+1):
+    for i in range(1, num_questions+1):
         problem_query = str(i)
         
         question = dao.GetProblem(problem_query, n_args=1)
