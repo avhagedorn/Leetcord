@@ -16,36 +16,6 @@ class LinkingModule(commands.Cog):
         self.client = client
 
     @commands.command(
-        name="neetcode", 
-        aliases=["nc"],
-        brief="Link to Neetcode.",
-        description="An excellent selection of leetcode questions."
-    )
-    async def neetcode(self, ctx):
-        embed = discord.Embed(colour=0xff9d5c,title="🚀 Neetcode",description="An excellent selection of leetcode questions.",url="https://neetcode.io/")
-        await ctx.send(embed=embed)
-
-    @commands.command(
-        name="leetcode", 
-        aliases=["lc"],
-        brief="Link to Leetcode.",
-        description="Your one-stop-shop for coding problems."
-    )
-    async def leetcode(self, ctx):
-        embed = discord.Embed(colour=0xff9d5c,title="Leetcode",description="Your one-stop-shop for coding problems.",url="https://leetcode.com/problemset/all")
-        embed.set_thumbnail(url=self.client.user.avatar_url)
-        await ctx.send(embed=embed)
-
-    @commands.command(
-        name="about", 
-        brief="About Leetcord.",
-        description="A tracking solution for leetcode."
-    )
-    async def about(self, ctx):
-        embed = discord.Embed(colour=0xff9d5c,title="About Leetcord",description="Learn more about Leetcord!",url="https://leetcord.herokuapp.com/about")
-        await ctx.send(embed=embed)
-
-    @commands.command(
         name="dailyquestion",
         aliases=["daily", "questionoftoday", "today","dq"],
         brief="The question of the day.",
@@ -94,4 +64,34 @@ class LinkingModule(commands.Cog):
             embed.set_footer(text="This is a premium question.")
 
         await ctx.reply(embed=embed)
+
+    @commands.command(
+        name="neetcode", 
+        aliases=["nc"],
+        brief="Link to Neetcode.",
+        description="An excellent selection of leetcode questions."
+    )
+    async def neetcode(self, ctx):
+        embed = discord.Embed(colour=0xff9d5c,title="🚀 Neetcode",description="An excellent selection of leetcode questions.",url="https://neetcode.io/")
+        await ctx.send(embed=embed)
+
+    @commands.command(
+        name="leetcode", 
+        aliases=["lc"],
+        brief="Link to Leetcode.",
+        description="Your one-stop-shop for coding problems."
+    )
+    async def leetcode(self, ctx):
+        embed = discord.Embed(colour=0xff9d5c,title="Leetcode",description="Your one-stop-shop for coding problems.",url="https://leetcode.com/problemset/all")
+        embed.set_thumbnail(url=self.client.user.avatar_url)
+        await ctx.send(embed=embed)
+
+    @commands.command(
+        name="about", 
+        brief="About Leetcord.",
+        description="A tracking solution for leetcode."
+    )
+    async def about(self, ctx):
+        embed = discord.Embed(colour=0xff9d5c,title="About Leetcord",description="Learn more about Leetcord!",url="https://leetcord.herokuapp.com/about")
+        await ctx.send(embed=embed)
 

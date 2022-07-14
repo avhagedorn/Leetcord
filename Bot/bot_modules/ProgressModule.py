@@ -72,6 +72,9 @@ class ProgressModule(commands.Cog):
                 solution_id = int(solution_id)
                 takeaway = ' '.join(rest)
 
+                if len(takeaway) > 255:
+                    await ctx.reply(f"Your takeaway is too long, please limit yourself to 255 characters. You used {len(takeaway)}.")
+                    return
                 solution = self.client.dao.GetSolution(solution_id)
 
                 if solution:
@@ -135,16 +138,18 @@ class ProgressModule(commands.Cog):
         description="Use `.stats <Member>` to get a member's stats. If no member is provided, the caller's stats will be displayed."
     )
     async def command(self, ctx, discord_member: discord.User = None):
-
+        
         async def display_stats(self, ctx, user):
             easy, medium, hard = self.client.dao.GetMemberStats(user)
             embed = discord.Embed(colour=0xff9d5c,title="User Stats",url=f"https://leetcord.herokuapp.com/member/{user.discordID}",description=f"🟩`Easies Solved:` {easy}\n🟨`Mediums Solved:` {medium}\n🟥`Hards Solved:` {hard}\n#️⃣`Total Solved:` {easy+medium+hard}")
             embed.set_author(name=f"{user.discordName}'s Stats",url=f"https://leetcord.herokuapp.com/member/{user.discordID}",icon_url=user.discordPFP)
             await ctx.reply(embed=embed)
 
+        # If invoked on someone else indicate that they aren't verified.
+        # If invoked on self, indicate that the invoker isn't verified.
         if discord_member:
             member = self.client.dao.GetMember(discord_member.id)
-            await display_stats(self, ctx, member) if member else await ctx.reply(f"@{discord_member.display_name} hasn't been verified yet, cannot fetch stats.")
+            await display_stats(self, ctx, member) if member else await ctx.reply(f"{discord_member.mention} hasn't been verified yet, cannot fetch stats.")
         else:
             member = self.client.dao.GetMember(ctx.message.author.id)
             await display_stats(self, ctx, member) if member else await ctx.reply("You haven't been verified yet, contact Alan or Kanishk to get verification.")
@@ -176,7 +181,7 @@ class ProgressModule(commands.Cog):
         name="problem",
         aliases=["p"],
         brief="Fetches problem information.",
-        description="If a problem is listed in the database it will fetch it and display the 5 recent solutions submitted for it."
+        description="If a problem is listed in the database it will fetch it and display the 5 recent solutions submitted for it. Use `.problem <Leetcode Number/Leetcode Slug/Leetcode URL>` to invoke it."
     )
     async def problem(self, ctx, *args):
         n_args = len(args)
@@ -193,7 +198,8 @@ class ProgressModule(commands.Cog):
                 self.client.dao.MakeProblem(question)
             except Exception as e:
                 print(e)
-                await ctx.reply("An unexpected error occurred. If this issue persists, contact Alan or Kanishk.")
+                await ctx.reply("An unexpected error occurred when querying for the solution. If this issue persists, contact Alan or Kanishk.")
+                return
 
         embed = discord.Embed(
             colour=difficulty_color(question.difficulty),
@@ -213,7 +219,7 @@ class ProgressModule(commands.Cog):
     @commands.command(
         name="recent",
         brief="Fetches the most recent solutions posted.",
-        description="Displays the 5 most recently submitted solutions to the database, if a user is passed as a parameter said user's recent solutions will be displayed."
+        description="Use `.recent` or `.recent [Mention]`.Displays the 5 most recently submitted solutions to the database, if a user is passed as a parameter said user's recent solutions will be displayed."
     )
     async def recent(self, ctx, member: discord.User = None):
         recent_user = None
@@ -241,7 +247,7 @@ class ProgressModule(commands.Cog):
         name="leeterboard",
         aliases=["letterboard", "leaderboard","lb"],
         brief="Top 5 users with most solved problems.",
-        description="Top 5 users with most solved problems."
+        description="Top 5 users with most solved problems, simply call `.leeterboard`."
     )
     async def leeterboard(self, ctx):
         users: List[Member] = self.client.dao.GetTopUsers(limit=5)
