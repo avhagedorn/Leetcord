@@ -154,7 +154,7 @@ class DAO:
         if cls._instance is None:
             cls._instance = super(DAO, cls).__new__(cls)
             
-            engine = create_engine(Constants.CONNECTION_URL)            
+            engine = create_engine(Constants.CONNECTION_URL, pool_size=300, pool_pre_ping=True)            
             Base.metadata.create_all(bind=engine)
             Session = sessionmaker(bind=engine)
             cls._session = Session()
