@@ -7,7 +7,7 @@ class LeetcordHelpCommand(commands.HelpCommand):
   
   async def send_bot_help(self,mapping):
     destination = self.get_destination()
-    embed = discord.Embed(colour=0xff9d5c,title="Help Menu",url="https://leetcord.herokuapp.com/commands")
+    embed = discord.Embed(colour=0xff9d5c,title="Help Menu",description=f"Use `.help [command_name]` to learn more about the specific commands.",url="https://leetcord.herokuapp.com/commands")
     for cog in mapping:
       if len(mapping[cog]) > 0 and cog:
         cog_commands = [f"`{command.name}`\t{command.brief}" for command in cog.get_commands() if not command.hidden]
