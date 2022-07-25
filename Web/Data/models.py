@@ -13,7 +13,7 @@ class Member(models.Model):
     # Instead of searching solution and counting it, individually we can store the num completed here.
 
     def __str__(self) -> str:
-        return f"Member {self.discordName} verified on {self.date_verified}"
+        return f"Member {self.discordName} verified on {self.date_verified.strftime('%B %e, %Y')}"
 
 class Problem(models.Model):
     class DIFFICULTY_CHOICES(models.IntegerChoices):

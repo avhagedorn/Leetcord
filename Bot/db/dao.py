@@ -4,25 +4,39 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker, subqueryload
 from datetime import datetime
 from leetcode_service.leetcode_util import ParseSlugFromUrl
-from db.models import Problem, Solve
+from db.models import Problem, Solve, Base, Member
 from db.db_constants import Constants
-from db.models import Base, Member
 
 class DAO:
     _instance = None
 
+    def validate_connection(func):
+        def wrapper(self,*args,**kwargs):
+            # Checks if the underlying connection is still valid
+            # IF the connection is valid, do nothing and operate the function as normal
+            # Otherwise, if the connection is invalid then close it, the function will reopen another one.
+            try:
+                self._session.connection()
+            except:
+                self._session.close()
+            return func(self,*args, **kwargs)
+        return wrapper
+
+    @validate_connection
     def MakeMember(self, member: Member):
         self._session.add(member)
         self._session.commit()
 
         return member
 
+    @validate_connection
     def MakeProblem(self, problem: Problem):
         self._session.add(problem)
         self._session.commit()
 
         return problem
 
+    @validate_connection
     def Solved(self, solvee: Member, problem: Problem):
         solution = Solve()
         solution.date = datetime.now()
@@ -37,6 +51,7 @@ class DAO:
 
         return solution
 
+    @validate_connection
     def UpdateTakeaway(self, solution: Solve, takeaway: str):
         solution.takeaway = takeaway
         self._session.add(solution)
@@ -44,12 +59,14 @@ class DAO:
 
         return solution
 
+    @validate_connection
     def DeleteSolution(self, solution):
         solvee = solution.solvee
         solvee.num_solutions -= 1
         self._session.add(solvee)
         self.DeleteRow(solution)
 
+    @validate_connection
     def DeleteRow(self, obj):
         klass = obj.__class__
 
@@ -66,13 +83,16 @@ class DAO:
                 """
             )
 
+    @validate_connection
     def GetMember(self, discordID: str) -> Member:
         query = select(Member).where(Member.discordID == discordID)
         return self._FindFirst(query)
 
+    @validate_connection
     def GetMemberCount(self) -> int:
         return self._session.query(Member).count()
 
+    @validate_connection
     def GetMemberStats(self, member: Member):
         joins = self._session.query(Solve).join(Solve.problem).where(Solve.solvee == member)
         retVal = [0, 0, 0]
@@ -82,13 +102,16 @@ class DAO:
 
         return retVal
 
+    @validate_connection
     def GetTopUsers(self, limit: int = 10):
         return self._session.query(Member).order_by(Member.num_solutions.desc()).limit(limit).all()
-
+    
+    @validate_connection
     def GetSolution(self, id: int) -> Solve:
         query = select(Solve).where(Solve.id == id)
         return self._FindFirst(query)
     
+    @validate_connection
     def GetProblem(self, search: str, n_args: int) -> Problem:
 
         if search.isnumeric():
@@ -109,6 +132,7 @@ class DAO:
             # Query based on title
             return self._GetProblemByTitle(search)
 
+    @validate_connection
     def RecentProblemSolutions(self, problem: Problem = None, limit: int = 5) -> List[Solve]:
         query = select(Solve)
         if problem:
@@ -116,6 +140,7 @@ class DAO:
         query = query.order_by(Solve.date.desc()).limit(limit).options(subqueryload(Solve.solvee))
         return self._session.execute(query).scalars().all()
 
+    @validate_connection
     def RecentUserSolutions(self, solvee: Member = None, limit: int = 5) -> List[Solve]:
         query = select(Solve)
         if solvee:
@@ -123,6 +148,7 @@ class DAO:
         query = query.order_by(Solve.date.desc()).limit(limit).options(subqueryload(Solve.problem))
         return self._session.execute(query).scalars().all()
 
+    @validate_connection
     def GetRandomProblem(self, difficulty_filter = None, premium_filter = None) -> Problem:
         query = self._session.query(Problem)
 
@@ -135,18 +161,22 @@ class DAO:
         row_count = query.count()
         return query.order_by(Problem.id).limit(1).offset(random.randint(0, row_count-1)).first()
 
+    @validate_connection
     def _GetProblemByNumber(self, number: int):
         query = select(Problem).where(Problem.problem_number == number)
         return self._FindFirst(query)
     
+    @validate_connection
     def _GetProblemBySlug(self, slug: str):
         query = select(Problem).where(Problem.slug == slug)
         return self._FindFirst(query)
     
+    @validate_connection
     def _GetProblemByTitle(self, title: str):
         query = select(Problem).where(Problem.problem_name == title)
         return self._FindFirst(query)
 
+    @validate_connection
     def _FindFirst(self, query):
         return self._session.execute(query.limit(1)).scalars().first()
 
