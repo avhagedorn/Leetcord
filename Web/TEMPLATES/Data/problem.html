@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}
+    {% if problem %}
+        Statistics for {{problem.problem_name}}
+    {% else %}
+        Problem Not Found!
+    {% endif %}
+{% endblock %}
 {% block CSS %}
     <link rel="stylesheet" href="{% static 'Data/userCard.css' %}"></link>
     {% if pagination %}

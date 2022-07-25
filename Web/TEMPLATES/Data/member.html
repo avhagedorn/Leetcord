@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block title %}
+    {% if member %}
+        {{member.discordName}}'s Profile
+    {% else %}
+        User Not Found!
+    {% endif %}
+{% endblock %}
+
 {% block CSS %}
     <link rel="stylesheet" href="{% static 'Data/userCard.css' %}"></link>
     {% if pagination %}
