@@ -17,12 +17,20 @@ class ProgressModule(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    async def validate_connection(self,ctx):
+        if not self.client.dao._session.is_active:
+            self.client.dao._session.begin()
+    async def terminate_connection(self,ctx):
+        self.client.dao._session.close()
+
     @commands.command(
         name="solved", 
         aliases=["s", "slvd"],
         brief="Adds a solution to your account.",
         description="If the user is registered they can run this command by doing `.solved <Leetcode Number/Leetcode Slug/Leetcode URL>` to add a solution to the database. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def solved(self, ctx, *args):
         user = self.client.dao.GetMember(ctx.message.author.id)
 
@@ -63,6 +71,8 @@ class ProgressModule(commands.Cog):
         brief="Adds a takeaway to your solution.",
         description="If the user is registered and is associated with a solution they can run this command by doing `.takeaway <SolvedID> <Takeaway>` to add a takaway to the solution. On success the command will send an embed containing a link to the solution. Otherwise, if it fails, the command will indicate as such."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def takeaway(self, ctx, *args):
         user = self.client.dao.GetMember(ctx.message.author.id)
 
@@ -105,6 +115,8 @@ class ProgressModule(commands.Cog):
         brief="Deletes a solution.",
         description="Use `.delete <SolveID>` to delete a solution. The user attempting a delete must have created the solution."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def delete(self, ctx, solution_id):
         user = self.client.dao.GetMember(ctx.message.author.id)
 
@@ -137,6 +149,8 @@ class ProgressModule(commands.Cog):
         brief="Gets a user's submission stats.",
         description="Use `.stats <Member>` to get a member's stats. If no member is provided, the caller's stats will be displayed."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def command(self, ctx, discord_member: discord.User = None):
         
         async def display_stats(self, ctx, user):
@@ -162,6 +176,8 @@ class ProgressModule(commands.Cog):
         description="Use `.member <Member>` in order to create a new member in the database.",
         hidden=True
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def makemember(self, ctx, member: discord.User):
         new_member = Member()
         new_member.discordID = member.id
@@ -183,6 +199,8 @@ class ProgressModule(commands.Cog):
         brief="Fetches problem information.",
         description="If a problem is listed in the database it will fetch it and display the 5 recent solutions submitted for it. Use `.problem <Leetcode Number/Leetcode Slug/Leetcode URL>` to invoke it."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def problem(self, ctx, *args):
         n_args = len(args)
         problem_query = f"{' '.join(args)}"
@@ -221,6 +239,8 @@ class ProgressModule(commands.Cog):
         brief="Fetches the most recent solutions posted.",
         description="Use `.recent` or `.recent [Mention]`.Displays the 5 most recently submitted solutions to the database, if a user is passed as a parameter said user's recent solutions will be displayed."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def recent(self, ctx, member: discord.User = None):
         recent_user = None
 
@@ -249,6 +269,8 @@ class ProgressModule(commands.Cog):
         brief="Top 5 users with most solved problems.",
         description="Top 5 users with most solved problems, simply call `.leeterboard`."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def leeterboard(self, ctx):
         users: List[Member] = self.client.dao.GetTopUsers(limit=5)
 
@@ -274,6 +296,8 @@ class ProgressModule(commands.Cog):
         brief="Displays a user's information.",
         description="Use `.user [Member]`. If a Member is given it will display their number of solutions as well as a link to their information. Otherwise it will display the invoker's information. If the user doesn't exist it will indicate as such."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def user(self, ctx, member: discord.User = None):
         if member:
             user_id = member.id
@@ -294,6 +318,8 @@ class ProgressModule(commands.Cog):
         brief="Updates your information.",
         description="Use `.update`.Synchronizes your Discord Image and Discord Nickname with the database."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def update(self, ctx):
         user = self.client.dao.GetMember(ctx.message.author.id)
 

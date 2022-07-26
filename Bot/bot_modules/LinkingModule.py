@@ -12,6 +12,12 @@ class LinkingModule(commands.Cog):
         The external linking interface for Leetcord.
     """
 
+    async def validate_connection(self,ctx):
+        if not self.client.dao._session.is_active:
+            self.client.dao._session.begin()
+    async def terminate_connection(self,ctx):
+        self.client.dao._session.close()
+
     def __init__(self, client):
         self.client = client
 
@@ -21,6 +27,8 @@ class LinkingModule(commands.Cog):
         brief="The question of the day.",
         description="Fetches the question of the day from Leetcode."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def dailyquestion(self, ctx):
         question = LeetcodeClient.GetQuestionOfToday()
 
@@ -42,6 +50,8 @@ class LinkingModule(commands.Cog):
         brief="A random question.",
         description="Use `.random (easy/medium/hard) (premium)`. This command by default provides a random choice from non-premium questions from LeetCode. If a difficulty is provided the search will be limited to that selection. If premium is passed as a parameter the search will be expanded to include premium problems."
     )
+    @commands.before_invoke(validate_connection)
+    @commands.after_invoke(terminate_connection)
     async def random(self, ctx, raw_difficulty='', raw_premium=''):
         is_premium = False
         difficulty = None
