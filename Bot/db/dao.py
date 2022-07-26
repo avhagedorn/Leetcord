@@ -14,12 +14,13 @@ class DAO:
         def wrapper(self,*args,**kwargs):
             # Checks if the underlying connection is still valid
             # IF the connection is valid, do nothing and operate the function as normal
-            # Otherwise, if the connection is invalid then close it, the function will reopen another one.
-            try:
-                self._session.connection()
-            except:
-                self._session.close()
-            return func(self,*args, **kwargs)
+            # Otherwise, if the connection is invalid then begin a new one.
+            # Always close the session once complete.
+            if not self._session.is_active:
+                self._session.begin()
+            retVal = func(self,*args, **kwargs)
+            self._session.close()
+            return retVal
         return wrapper
 
     @validate_connection
