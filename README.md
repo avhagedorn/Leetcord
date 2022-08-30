@@ -108,13 +108,20 @@ heroku git:clone -a <APPLICATION_NAME>
 2. Add buildpacks to heroku application
 ```
 heroku buildpacks:add --index 1 heroku-community/apt
-heroku buildpacks:set heroku/python
-heroku buildpacks:addhttps://github.com/matt-bertoncello/python-pyodbc-buildpack.git
+heroku buildpacks:add heroku/python
+heroku buildpacks:add https://github.com/matt-bertoncello/python-pyodbc-buildpack.git
 ```
 > Credit: [@matt-bertoncello](https://github.com/matt-bertoncello/python-pyodbc-buildpack) for Azure Buildpack Instructions. The Aptfile is already configured.
 3. Deploy to Heroku
 ```bash
 git push heroku main
+```
+4. Redeploy
+> Since this application syncs questions with leetcode at deployment you may have to re-deploy your application as time goes on and new questions are added. Do the following commands to properly redeploy. Credit: [Darragh ORiordan](https://www.darraghoriordan.com/2019/03/02/heroku-push-failed-force-rebuild/)
+```
+heroku plugins:install heroku-releases-retry
+heroku releases:retry --app {your-app}
+heroku releases:output
 ```
 ## Commands <a id="COMMANDS"></a>
 * Solved: `.solved [Leetcode Number/Leetcode Slug/Leetcode URL]`
